@@ -80,7 +80,7 @@ const links = {
 };
 
 function MapLink({ query }: { query: string }) {
-  return <a className="map-link" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query + ", Australia")}`} target="_blank" rel="noreferrer">地圖 ↗</a>;
+  return <a className="map-link" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query + ", Australia")}`} target="_blank" rel="noreferrer" aria-label={`在 Google Maps 開啟 ${query}`}><span className="pin-icon" aria-hidden="true"></span><span>開啟地圖</span><span className="external-arrow" aria-hidden="true">↗</span></a>;
 }
 
 export default function Home() {
