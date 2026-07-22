@@ -21,13 +21,13 @@ const days: Day[] = [
   { day: 3, date: "8/10", weekday: "一", city: "墨爾本", title: "CBD 咖啡、建築與塗鴉", summary: "從 Lune 與 Chinatown 一路走到 Flinders Street，串連經典拱廊與咖啡巷。", transport: "電車＋步行", stops: ["08:30 Lune Russell Street", "Chinatown", "10:00 州立圖書館圓頂閱覽室", "Melbourne Central 大鐘與子彈塔", "Essensorie 香氛店", "皇家拱廊、Block Arcade、Haigh’s Chocolates", "Town Hall 與聖保羅大教堂", "Hosier Lane 塗鴉街", "Flinders Street Station", "Degraves Street", "Pidapipó Gelato 收尾"], food: ["Lune Croissanterie", "Axil Coffee", "Pho Bo Ga Mekong", "Hareruya 麻糬冰", "La Petite Crêperie", "Overlay Coffee 花生咖啡"], note: "Overlay 建議 15:30 前抵達、La Petite Crêperie 約 16:00 開始營業；時間請當日確認。" },
   { day: 4, date: "8/11", weekday: "二", city: "墨爾本", title: "Yarra Valley 熱氣球與酒莊", summary: "清晨熱氣球俯瞰葡萄園，接著品酒、起司與尋找野生袋鼠。", transport: "預約包車＋熱氣球", stops: ["Balgownie Estate 集合", "Yarra Valley 熱氣球（飛行約 1 小時）", "Balgownie Estate 早餐", "Yering Station", "Yarra Valley Dairy", "Punt Road Wines", "St Huberts Cellar Door 午餐", "Domaine Chandon", "Yarra Valley Chocolaterie & Ice Creamery", "野生袋鼠觀察"], note: "熱氣球受天候影響大，前一晚確認集合與取消通知；飲酒後勿駕車。" },
   { day: 5, date: "8/12", weekday: "三", city: "墨爾本", title: "Great Ocean Road 大洋路", summary: "沿海岸公路經 Geelong、紀念拱門與 Lorne，前往十二門徒岩。", transport: "包車・單程約 3 小時以上", stops: ["Geelong", "Great Ocean Road Memorial Arch", "Lorne 小鎮", "沿岸觀景點", "十二門徒岩", "Loch Ard Gorge 周邊"], note: "大洋路全長約 276 km；冬季日照短，穿防風防雨外套並預留車程，容易暈車者先準備暈車藥。" },
-  { day: 6, date: "8/13", weekday: "四", city: "墨爾本", title: "北區藝文・市場與大學", summary: "從 Queen Victoria Market 走訪 Carlton、Lygon Street、墨爾本大學與 Fitzroy。", transport: "電車＋步行", stops: ["Queen Victoria Market（週三休市）", "Carlton Gardens 與皇家展覽館", "Melbourne Museum", "Lygon Street 小義大利", "墨爾本大學", "Fitzroy 文青街區", "王子橋亞拉河夜景", "有時間可加 Spencer Outlet"], food: ["Brunetti Classico", "DOC Pizza", "Tiamo", "Donnini’s"], note: "原 PDF 日期為週四，QVM 預計營業；仍請出發前查官方開市日。" },
+  { day: 6, date: "8/13", weekday: "四", city: "墨爾本", title: "北區藝文・市場與大學", summary: "從 Queen Victoria Market 走訪 Carlton、Lygon Street、墨爾本大學與 Fitzroy。", transport: "電車＋步行", stops: ["06:00–15:00 Queen Victoria Market", "Carlton Gardens 與皇家展覽館", "Melbourne Museum", "Lygon Street 小義大利", "墨爾本大學", "Fitzroy 文青街區", "王子橋亞拉河夜景", "有時間可加 Spencer Outlet"], food: ["Brunetti Classico", "DOC Pizza", "Tiamo", "Donnini’s"], note: "QVM 週三休市，8/13 為週四；出發前再確認當週開市資訊。" },
   { day: 7, date: "8/14", weekday: "五", city: "墨爾本", title: "Phillip Island 小企鵝", summary: "彩虹小屋、野生動物與海岸景觀，晚上觀賞小企鵝歸巢。", transport: "包車・市區至島上約 1.5–2 小時", stops: ["Brighton Bathing Boxes", "Maru Koala & Animal Park", "Churchill Island Heritage Farm", "Nobbies Centre", "Penguin Parade 小企鵝歸巢"], note: "海邊夜間寒冷，準備保暖防風衣物；企鵝歸巢依現場規範禁止攝影。" },
   { day: 8, date: "8/15", weekday: "六", city: "墨爾本", title: "南墨爾本・藝術與綠意", summary: "從 NGV、皇家植物園到市場美食，視體力安排 DFO 採買。", transport: "電車＋步行", stops: ["NGV 維多利亞國家美術館", "Royal Botanic Gardens", "South Melbourne Market", "DFO South Wharf（選配）", "Chapel Street"], food: ["ST. ALi／Padre Coffee", "Aptus Oysters", "Simply Spanish", "Agathé Pâtisserie", "Mama Tran Dumplings"], note: "市場人潮較多，建議早到；NGV 特展可能需另購票。" },
-  { day: 9, date: "8/16", weekday: "日", city: "墨爾本", title: "Sovereign Hill 淘金小鎮", summary: "搭火車前往 Ballarat，體驗地下礦場、淘金與 1850 年代街景。", transport: "V/Line 火車＋當地公車", stops: ["Southern Cross → Ballarat", "轉公車至 Sovereign Hill", "Red Hill Mine 地下導覽", "溪畔免費淘金", "煉金表演與紅衣衛隊遊行", "備選：Ballarat Wildlife Park", "備選：Lake Wendouree 與植物園", "回程可逛 Spencer Outlet"], note: "Google Docs 與 PDF 記載的公車路線不同；請出發前以 PTV Journey Planner 顯示的即時路線為準。" },
+  { day: 9, date: "8/16", weekday: "日", city: "墨爾本", title: "Sovereign Hill 淘金小鎮", summary: "搭火車前往 Ballarat，體驗地下礦場、淘金與 1850 年代街景。", transport: "V/Line 火車＋當地公車", stops: ["07:41／08:24 Southern Cross 出發", "Ballarat Station 轉公車", "Red Hill Mine 地下導覽", "溪畔免費淘金", "12:00 煉金表演", "13:30 紅衣衛隊遊行", "備選：Ballarat Wildlife Park", "備選：Lake Wendouree 與植物園", "回程可逛 Spencer Outlet"], note: "火車與公車路線可能異動，出發前用 PTV Journey Planner 確認即時班次。" },
   { day: 10, date: "8/17", weekday: "一", city: "移動", title: "墨爾本飛雪梨・Darling Harbour", summary: "中午搭國內線前往雪梨，入住後漫步 Darling Harbour 與 QVB。", transport: "QF444・MEL 12:30 → SYD 13:55", stops: ["墨爾本住宿 Check-out 11:00", "QF444 飛往雪梨", "雪梨住宿 Check-in 15:00", "16:30 Darling Harbour", "QVB 夜景"], food: ["Ho Jiak Haymarket", "KHAO·SOI", "Chat Thai", "Mamak", "Shortstop Coffee & Donuts"], note: "預留國內線報到與市區交通時間。" },
   { day: 11, date: "8/18", weekday: "二", city: "雪梨", title: "歌劇院與港灣歷史步道", summary: "Circular Quay 出發，走訪歌劇院、皇家植物園、歷史建築與海德公園。", transport: "火車／輕軌＋步行", stops: ["Circular Quay", "Sydney Opera House 11:00 中文導覽（已規劃預約）", "Mrs Macquarie’s Chair", "The Mint", "Hyde Park", "St Mary’s Cathedral"], food: ["ASLAN Coffee／Mogu Mogu", "Marrickville Pork Roll"], note: "導覽票與集合地點請前一天再次確認。" },
-  { day: 12, date: "8/19", weekday: "三", city: "雪梨", title: "Blue Mountains 深度一日遊", summary: "早班火車至 Katoomba，搭景觀纜車、走雨林步道與三姊妹岩。", transport: "Central → Katoomba 火車＋686 公車", stops: ["建議 06:25 火車（PDF 規劃）", "Scenic World", "紅線 Scenic Railway", "雨林步道", "藍線 Cableway", "黃線 Skyway", "Three Sisters／Echo Point", "Leura 小鎮", "16:19 回程火車（PDF 規劃）"], food: ["Wayzgoose Diner 下午茶"], note: "推薦玩法：黃線 → 紅線 → 雨林 → 藍線上山；班次與纜車營運依當日官方資訊。" },
+  { day: 12, date: "8/19", weekday: "三", city: "雪梨", title: "Blue Mountains 深度一日遊", summary: "早班火車至 Katoomba，搭景觀纜車、走雨林步道與三姊妹岩。", transport: "Central → Katoomba 火車＋686 公車", stops: ["06:25 Central 出發", "08:25 Katoomba 抵達", "轉 686／686G 公車至 Scenic World", "黃色 Skyway → 紅色 Railway", "雨林步道約 30 分鐘", "藍色 Cableway 上山（站右側看景）", "Three Sisters／Echo Point", "14:00–16:00 Leura 小鎮", "16:19 Leura 回程"], food: ["Wayzgoose Diner 下午茶"], note: "班次與纜車營運可能調整，當天以官方資訊為準。" },
   { day: 13, date: "8/20", weekday: "四", city: "雪梨", title: "Kiama & Gerringong 南海岸", summary: "搭火車探索海濱小鎮、網紅路牌與 Kiama Blowhole。", transport: "Central → Gerringong → Kiama 火車／737 公車", stops: ["Gerringong", "Tasma Drive 周邊步行", "巴士返回 Kiama", "Kiama 午餐", "Kiama Blowhole", "市區特色小店"], food: ["Diggies", "Penny Whistlers"], note: "火車約每小時一班；以 Transport NSW Trip Planner 查詢即時班次。" },
   { day: 14, date: "8/21", weekday: "五", city: "雪梨", title: "魚市場・雪梨大學・Newtown", summary: "海鮮早餐後走訪大學古典建築，下午探索 Newtown，晚上逛唐人街夜市。", transport: "輕軌＋步行", stops: ["08:30 Sydney Fish Market", "11:00 University of Sydney／The Quadrangle", "14:00 Newtown", "18:00 Chinatown Friday Night Market"], food: ["Vic’s Meat Market 牛肉三明治", "烤生蠔", "Campos Coffee", "Emperor’s Puffs"], note: "魚市場新址與攤商資訊可能調整，出發前查官方公告。" },
   { day: 15, date: "8/22", weekday: "六", city: "雪梨", title: "North Sydney・The Rocks・返程", summary: "以北雪梨早餐和週末市集收尾，下午採買後前往機場。", transport: "火車／渡輪＋機場交通", stops: ["09:00 Kirribilli／North Sydney", "The Rocks Weekend Market", "12:00 QVB", "14:00 Black Star Pastry", "16:00 取行李前往機場", "SYD 21:55 出發"], food: ["Celsius Coffee Co.", "The Grounds", "Black Star Pastry"], note: "國際線建議至少提前 3 小時抵達；機場站附加費不計入 Opal 日上限。" },
@@ -87,6 +87,17 @@ export default function Home() {
   const [city, setCity] = useState("全部");
   const [openDay, setOpenDay] = useState(2);
   const visibleDays = useMemo(() => city === "全部" ? days : days.filter((d) => d.city === city), [city]);
+  const tripStatus = useMemo(() => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const start = new Date(2026, 7, 8);
+    const end = new Date(2026, 7, 23);
+    const oneDay = 86400000;
+    if (today < start) return { label: "距離出發", value: String(Math.ceil((start.getTime() - today.getTime()) / oneDay)), unit: "天", day: days[0] };
+    if (today > end) return { label: "旅程狀態", value: "完成", unit: "", day: days[15] };
+    const index = Math.floor((today.getTime() - start.getTime()) / oneDay);
+    return { label: "今天是", value: `D${index + 1}`, unit: "", day: days[index] };
+  }, []);
 
   return (
     <main>
@@ -99,18 +110,15 @@ export default function Home() {
 
       <section className="hero" id="top">
         <div className="hero-copy">
-          <p className="eyebrow">MELBOURNE → SYDNEY · 08—23 AUG 2026</p>
-          <h1>16 DAYS<br/><em>DOWN UNDER</em></h1>
-          <p className="lede">一份為手機而生的澳洲旅行隨身指南。從墨爾本咖啡巷、維多利亞海岸，到雪梨港灣與藍山。</p>
-          <div className="hero-actions"><a className="button dark" href="#itinerary">查看完整行程</a><a className="button line" href="#quick">旅途速查</a></div>
+          <p className="eyebrow">2026 澳洲旅行手冊 · 8/8—8/23</p>
+          <h1>墨爾本<br/><em>→ 雪梨</em></h1>
+          <p className="lede">16 天行程、交通、餐廳、票券與行前清單，都放在這裡。</p>
+          <div className="hero-actions"><a className="button dark" href="#itinerary">每日行程</a><a className="button line" href="#essentials">航班／住宿／交通</a></div>
         </div>
-        <div className="route-card" aria-label="行程概要">
-          <div><b>01</b><span>TAIPEI</span><small>出發</small></div>
-          <i></i>
-          <div><b>02</b><span>MELBOURNE</span><small>8 nights</small></div>
-          <i></i>
-          <div><b>03</b><span>SYDNEY</span><small>5 nights</small></div>
-          <div className="stamp">AUS<br/>’26</div>
+        <div className="route-card trip-card" aria-label="旅程狀態">
+          <small>{tripStatus.label}</small><strong>{tripStatus.value}<i>{tripStatus.unit}</i></strong>
+          <div className="next-plan"><b>{tripStatus.day.date}（{tripStatus.day.weekday}）</b><span>{tripStatus.day.title}</span><small>{tripStatus.day.transport}</small></div>
+          <a href={`#day-${tripStatus.day.day}`}>查看這一天 ↓</a>
         </div>
       </section>
 
@@ -122,7 +130,7 @@ export default function Home() {
         <div className="section-head"><div><p className="eyebrow">THE MASTER PLAN</p><h2>逐日行程</h2></div><p>點開日期即可看到景點順序、交通、餐飲與當日提醒。</p></div>
         <div className="filters" role="group" aria-label="篩選城市">{["全部","移動","墨爾本","雪梨"].map(x => <button key={x} className={city===x?"active":""} onClick={()=>setCity(x)}>{x}</button>)}</div>
         <div className="day-list">
-          {visibleDays.map((d) => <article className={`day ${openDay===d.day?"open":""}`} key={d.day}>
+          {visibleDays.map((d) => <article id={`day-${d.day}`} className={`day ${openDay===d.day?"open":""}`} key={d.day}>
             <button className="day-summary" onClick={()=>setOpenDay(openDay===d.day?0:d.day)} aria-expanded={openDay===d.day}>
               <span className="day-no">D{String(d.day).padStart(2,"0")}</span><span className="day-date">{d.date}<small>{d.weekday}</small></span><span className="day-title"><small>{d.city}</small>{d.title}</span><span className="toggle">{openDay===d.day?"−":"＋"}</span>
             </button>
@@ -139,15 +147,15 @@ export default function Home() {
           <article><span className="index">03</span><h3>墨爾本交通</h3><p>Free Tram Zone 內搭 Tram 免費且不需 touch on；起點或終點超出免費區，需使用 myki。火車與公車依規定 touch on／off。</p><a href={links.ptv} target="_blank" rel="noreferrer">PTV Journey Planner ↗</a><a href={links.melMap} target="_blank" rel="noreferrer">2026 官方旅遊地圖 ↗</a></article>
           <article><span className="index">04</span><h3>雪梨交通</h3><p>可用 Opal 或 Contactless card/device 搭 Metro、Train、Bus、Ferry、Light Rail。上下車都要正確 Tap；機場站費用另計。</p><a href={links.nsw} target="_blank" rel="noreferrer">Transport NSW Trip Planner ↗</a></article>
           <article><span className="index">05</span><h3>澳洲入境</h3><p>準備有效護照、有效簽證與 Incoming Passenger Card。符合資格者可在 kiosk 完成第一階段，再至 SmartGate 進行臉部辨識。</p><a href={links.smartgate} target="_blank" rel="noreferrer">ABF SmartGate 官方說明 ↗</a></article>
-          <article><span className="index">06</span><h3>天氣與行李</h3><p>澳洲 8 月為冬季。墨爾本天氣多變，準備防風防雨外套、摺疊傘與保暖層；企鵝島、熱氣球與藍山尤其注意低溫。</p><p>PDF 規劃：託運 23 kg、手提 7 kg；實際額度以航空公司訂位為準。行動電源隨身攜帶。</p></article>
+          <article><span className="index">06</span><h3>天氣與行李</h3><p>澳洲 8 月為冬季。墨爾本天氣多變，準備防風防雨外套、摺疊傘與保暖層；企鵝島、熱氣球與藍山尤其注意低溫。</p><p>目前行李規劃：託運 23 kg、手提 7 kg；出發前再以航空公司訂位資料確認。行動電源必須隨身攜帶。</p></article>
           <article><span className="index">07</span><h3>TRS 旅客退稅</h3><p>同一 ABN 的合格消費含 GST 合計至少 AUD 300，並於離境前 60 天內購買。離境當天攜帶護照、登機證、商品與合格正本發票；受限或大型託運物品需先給 ABF 查驗。</p><a href="https://www.abf.gov.au/entering-and-leaving-australia/tourist-refund-scheme" target="_blank" rel="noreferrer">ABF Tourist Refund Scheme ↗</a></article>
         </div>
       </section>
 
       <section className="section food" id="food">
-        <div className="section-head"><div><p className="eyebrow">COFFEE & TABLE</p><h2>雙城口袋名單</h2></div><p>不放照片，把空間留給真正有用的資訊：推薦、區域、預算與一鍵導航。</p></div>
+        <div className="section-head"><div><p className="eyebrow">COFFEE & TABLE</p><h2>雙城口袋名單</h2></div><p>依區域查看推薦餐點與預算，出發前可直接開啟地圖導航。</p></div>
         <div className="food-block"><div className="food-title"><span>MEL</span><div><h3>Melbourne Coffee Trail</h3><p>CBD 10 間特色咖啡店</p></div></div><div className="card-grid">{melCoffee.map((x,i)=><article className="place-card" key={x[0]}><small>{String(i+1).padStart(2,"0")} · COFFEE</small><h4>{x[0]}</h4><b>{x[1]}</b><p>{x[2]}</p><MapLink query={`${x[0]} Melbourne`}/></article>)}</div></div>
-        <div className="food-block"><div className="food-title coral"><span>SYD</span><div><h3>Sydney Food Guide</h3><p>精選 21 間咖啡、早午餐、正餐與甜點</p></div></div><div className="restaurant-list">{sydFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><h4>{x[0]}</h4><p>{x[2]}</p></div><b>{x[3]}</b><MapLink query={`${x[0]} Sydney`}/></article>)}</div><p className="data-note">營業時間與價格源自旅遊 PDF 規劃，店家可能臨時調整；導航前請先查看最新資訊。</p></div>
+        <div className="food-block"><div className="food-title coral"><span>SYD</span><div><h3>Sydney Food Guide</h3><p>精選 21 間咖啡、早午餐、正餐與甜點</p></div></div><div className="restaurant-list">{sydFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><h4>{x[0]}</h4><p>{x[2]}</p></div><b>{x[3]}</b><MapLink query={`${x[0]} Sydney`}/></article>)}</div><p className="data-note">價格為預估範圍；營業時間與菜單請在前往前確認。</p></div>
       </section>
 
       <section className="section checklist" id="checklist">
@@ -164,7 +172,7 @@ export default function Home() {
         <div><h3>駐澳洲代表處公開聯絡資訊</h3><p>旅外急難救助全球免付費專線：<a href="tel:+80008850885">+800-0885-0885</a></p><p>外交部旅外國人急難救助：<a href="tel:+886800085095">+886-800-085-095</a></p><p>護照遺失：先向當地警察報案取得證明，再聯繫駐外館處，準備護照影本、照片與報案證明。</p></div>
       </section>
 
-      <footer><div className="brand"><span>AU</span> Australia 2026</div><p>本網站依 2026 澳洲旅遊 PDF 整理。班次、票價、營業時間與入境規定可能變動，請以官方即時資訊為準。</p><div><a href={links.melMap} target="_blank" rel="noreferrer">Visit Melbourne</a><a href={links.sydney} target="_blank" rel="noreferrer">Sydney.com</a><a href="#top">回到頂端 ↑</a></div></footer>
+      <footer><div className="brand"><span>AU</span> Australia 2026</div><p>班次、票價、營業時間與入境規定可能變動，出發前請以官方即時資訊為準。</p><div><a href={links.melMap} target="_blank" rel="noreferrer">Visit Melbourne</a><a href={links.sydney} target="_blank" rel="noreferrer">Sydney.com</a><a href="#top">回到頂端 ↑</a></div></footer>
     </main>
   );
 }
