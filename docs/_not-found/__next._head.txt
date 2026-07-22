@@ -1,0 +1,5 @@
+1:"$Sreact.fragment"
+2:I[97367,["/australia-2026-travel/_next/static/chunks/0dbhjjzl8qfwv.js"],"ViewportBoundary"]
+3:I[97367,["/australia-2026-travel/_next/static/chunks/0dbhjjzl8qfwv.js"],"MetadataBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L2",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L3",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Australia 2026｜墨爾本 × 雪梨 16 天旅行指南"}],["$","meta","1",{"name":"description","content":"2026 澳洲 16 天旅行隨身指南：完整行程、交通、住宿、咖啡與餐廳口袋名單。"}]]}]}]}],null]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"7g0x36-lfE0uvKfcv7KZV"}
