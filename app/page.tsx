@@ -59,6 +59,29 @@ const dayRoutes: Record<number, DayRoute> = {
   16: { area: "香港 → 台北", mode: "transit", stops: ["Hong Kong International Airport", "Taiwan Taoyuan International Airport"] },
 };
 
+const dayMapPaths: Record<number, Array<[number, number]>> = {
+  1: [[16,65],[82,32]],
+  2: [[13,28],[43,54],[65,67],[83,37]],
+  3: [[16,20],[38,26],[57,20],[72,39],[62,62],[42,72],[22,64]],
+  4: [[16,64],[30,30],[46,45],[58,68],[69,48],[82,28],[86,70]],
+  5: [[12,24],[30,40],[49,52],[75,65],[88,76]],
+  6: [[16,62],[29,32],[43,28],[54,46],[48,67],[68,61],[84,76]],
+  7: [[12,26],[35,42],[56,62],[74,43],[87,70]],
+  8: [[18,30],[39,42],[58,67],[76,57],[86,28]],
+  9: [[14,65],[42,48],[65,66],[84,34]],
+  10: [[13,67],[58,24],[70,53],[82,63],[88,43]],
+  11: [[17,55],[34,32],[52,24],[67,43],[62,68],[82,72]],
+  12: [[12,66],[42,49],[61,66],[75,42],[87,27]],
+  13: [[13,22],[50,35],[65,52],[78,66],[88,78]],
+  14: [[16,37],[38,55],[61,43],[84,67]],
+  15: [[15,28],[33,46],[55,61],[69,45],[87,76]],
+  16: [[18,34],[82,66]],
+};
+
+const coastalMapDays = new Set([5,7,10,11,13,15]);
+const countryMapDays = new Set([4,9,12]);
+const flightMapDays = new Set([1,10,16]);
+
 const melCoffee = [
   ["Patricia Coffee Brewers", "Double Ristretto Flat White、季節手沖", "巷弄站飲、極簡菜單"],
   ["Brother Baba Budan", "Single Origin Flat White", "Seven Seeds 系、天花板木椅"],
@@ -164,6 +187,22 @@ const downloadDocs = [
   { title: "雪梨餐廳指南", subtitle: "2026 年 8 月口袋名單", size: "120 MB", href: "https://github.com/hungyic36-web/australia-2026-travel/releases/download/travel-documents-2026/Sydney-Restaurant-Guide-202608.pdf" },
 ];
 
+const foodCategories = ["全部","咖啡／早午餐","正餐","甜點／烘焙","市場／小吃","酒莊／品飲"] as const;
+type FoodCategory = typeof foodCategories[number];
+
+function getFoodCategory(name: string, description: string, area = ""): FoodCategory {
+  const value = `${name} ${description} ${area}`.toLowerCase();
+  if (/wine|chandon|yering|酒莊|品飲|氣泡酒/.test(value)) return "酒莊／品飲";
+  if (/south melbourne market|fish market|deli nuts|dim sim|dumpling|pork roll|onigiri|puffs|小吃|市場|飯糰|點心|生蠔/.test(value)) return "市場／小吃";
+  if (/chocol|croiss|pâtisserie|creperie|crêperie|gelat|donut|pastry|cannoleria|hareruya|pidapipó|lune|brunetti|baba su|甜點|冰淇淋|可頌|泡芙|薄餅|鬆餅/.test(value)) return "甜點／烘焙";
+  if (/coffee|cafe|espresso|roaster|beans|flat white|ristretto|breakfast|brunch|咖啡|早餐|早午餐|拿鐵|手沖/.test(value)) return "咖啡／早午餐";
+  return "正餐";
+}
+
+function foodMatches(category: FoodCategory, name: string, description: string, area = "") {
+  return category === "全部" || getFoodCategory(name, description, area) === category;
+}
+
 function MapLink({ query }: { query: string }) {
   return <a className="map-link" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query + ", Australia")}`} target="_blank" rel="noreferrer" aria-label={`在 Google Maps 開啟 ${query}`}><span className="pin-icon" aria-hidden="true"></span><span>開啟地圖</span><span className="external-arrow" aria-hidden="true">↗</span></a>;
 }
@@ -177,23 +216,33 @@ function routeUrl(route: DayRoute) {
   return `https://www.google.com/maps/dir/?${params.toString()}`;
 }
 
-function DayMap({ route }: { route: DayRoute }) {
-  const mapQuery = encodeURIComponent(route.area);
+function DayMap({ route, day }: { route: DayRoute; day: number }) {
+  const points = dayMapPaths[day].slice(0, route.stops.length);
+  const theme = flightMapDays.has(day) ? "flight" : coastalMapDays.has(day) ? "coast" : countryMapDays.has(day) ? "country" : "city";
   return (
     <aside className="day-map" aria-label={`${route.area} 當日路線地圖`}>
-      <div className="map-frame">
-        <iframe
-          title={`${route.area} 地圖`}
-          src={`https://maps.google.com/maps?q=${mapQuery}&z=11&output=embed`}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        />
+      <div className={`travel-map ${theme}`} role="img" aria-label={`${route.area} 景點與大致移動軌跡`}>
+        <span className="map-compass" aria-hidden="true">N</span>
+        <span className="map-caption">DAY {String(day).padStart(2,"0")} · TRAVEL MAP</span>
+        {points.slice(0,-1).map((point,index) => {
+          const next = points[index + 1];
+          const dx = next[0] - point[0];
+          const dy = next[1] - point[1];
+          const length = Math.sqrt(dx * dx + dy * dy);
+          const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+          return <span className="travel-line" aria-hidden="true" key={`${point[0]}-${point[1]}`} style={{left:`${point[0]}%`,top:`${point[1]}%`,width:`${length}%`,transform:`rotate(${angle}deg)`}}/>;
+        })}
+        {points.map((point,index) => (
+          <span className={`travel-stop ${point[0] > 66 ? "label-left" : ""}`} style={{left:`${point[0]}%`,top:`${point[1]}%`}} key={route.stops[index]}>
+            <i>{index + 1}</i><b>{route.stops[index]}</b>
+          </span>
+        ))}
       </div>
       <div className="map-route-head"><span>ROUTE MAP</span><strong>{route.area}</strong></div>
       <div className="map-route-stops">
         {route.stops.map((stop, index) => <span key={stop}><b>{index + 1}</b>{stop}</span>)}
       </div>
-      <a className="route-link" href={routeUrl(route)} target="_blank" rel="noreferrer">在 Google Maps 開啟完整路線 ↗</a>
+      <a className="route-link" href={routeUrl(route)} target="_blank" rel="noreferrer">需要導航時開啟 Google Maps ↗</a>
     </aside>
   );
 }
@@ -201,7 +250,11 @@ function DayMap({ route }: { route: DayRoute }) {
 export default function Home() {
   const [city, setCity] = useState("全部");
   const [openDay, setOpenDay] = useState(2);
+  const [foodFilter, setFoodFilter] = useState<FoodCategory>("全部");
   const visibleDays = useMemo(() => city === "全部" ? days : days.filter((d) => d.city === city), [city]);
+  const visibleSydneyFood = useMemo(() => sydFood.filter(x => foodMatches(foodFilter,x[0],x[2],x[1])),[foodFilter]);
+  const visibleMelTripFood = useMemo(() => melTripFood.filter(x => foodMatches(foodFilter,x[0],x[2],x[1])),[foodFilter]);
+  const visibleSydTripFood = useMemo(() => sydTripFood.filter(x => foodMatches(foodFilter,x[0],x[2],x[1])),[foodFilter]);
   const tripStatus = useMemo(() => {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -268,7 +321,7 @@ export default function Home() {
             <button className="day-summary" onClick={()=>setOpenDay(openDay===d.day?0:d.day)} aria-expanded={openDay===d.day}>
               <span className="day-no">D{String(d.day).padStart(2,"0")}</span><span className="day-date">{d.date}<small>{d.weekday}</small></span><span className="day-title"><small>{d.city}</small>{d.title}</span><span className="toggle">{openDay===d.day?"−":"＋"}</span>
             </button>
-            {openDay===d.day && <div className="day-detail"><div className="detail-intro"><p>{d.summary}</p><span>{d.transport}</span></div><div className="day-detail-grid"><div className="day-plan"><ol>{d.stops.map((s,i)=><li key={s}><b>{String(i+1).padStart(2,"0")}</b><span>{s}</span></li>)}</ol>{d.food&&<div className="food-line"><b>順路口袋名單</b>{d.food.map(f=><span key={f}>{f}</span>)}</div>}{d.note&&<p className="note">NOTE — {d.note}</p>}</div><DayMap route={dayRoutes[d.day]}/></div></div>}
+            {openDay===d.day && <div className="day-detail"><div className="detail-intro"><p>{d.summary}</p><span>{d.transport}</span></div><div className="day-detail-grid"><div className="day-plan"><ol>{d.stops.map((s,i)=><li key={s}><b>{String(i+1).padStart(2,"0")}</b><span>{s}</span></li>)}</ol>{d.food&&<div className="food-line"><b>順路口袋名單</b>{d.food.map(f=><span key={f}>{f}</span>)}</div>}{d.note&&<p className="note">NOTE — {d.note}</p>}</div><DayMap route={dayRoutes[d.day]} day={d.day}/></div></div>}
           </article>)}
         </div>
       </section>
@@ -287,10 +340,11 @@ export default function Home() {
       </section>
 
       <section className="section food" id="food">
-        <div className="section-head"><div><p className="eyebrow">COFFEE & TABLE</p><h2>雙城口袋名單</h2></div></div>
-        <div className="food-block"><div className="food-title"><span>MEL</span><div><h3>Melbourne Coffee Trail</h3><p>CBD 10 間特色咖啡店</p></div></div><div className="card-grid">{melCoffee.map((x,i)=><article className="place-card" key={x[0]}><small>{String(i+1).padStart(2,"0")} · COFFEE</small><h4>{x[0]}</h4><b>{x[1]}</b><p>{x[2]}</p><MapLink query={`${x[0]} Melbourne`}/></article>)}</div></div>
-        <div className="food-block"><div className="food-title coral"><span>SYD</span><div><h3>Sydney Food Guide</h3><p>精選 21 間咖啡、早午餐、正餐與甜點</p></div></div><div className="restaurant-list">{sydFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><h4>{x[0]}</h4><p>{x[2]}</p></div><b>{x[3]}</b><MapLink query={`${x[0]} Sydney`}/></article>)}</div><p className="data-note">價格為預估範圍；營業時間與菜單請在前往前確認。</p></div>
-        <div className="food-block trip-food-block"><div className="section-head compact"><div><p className="eyebrow">FROM THE MAIN ITINERARY</p><h3>行程順路美食</h3></div><p>以下餐飲與品飲地點來自主行程 PDF，與上方兩份專門指南分開整理，避免漏掉市場攤位、早餐、正餐、甜點與酒莊。</p></div><div className="trip-food-columns"><div><h4>Melbourne · {melTripFood.length} 間</h4><div className="trip-food-grid">{melTripFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p></div><MapLink query={`${x[0]} Melbourne`}/></article>)}</div></div><div><h4>Sydney & NSW · {sydTripFood.length} 間</h4><div className="trip-food-grid">{sydTripFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p></div><MapLink query={`${x[0]} Sydney`}/></article>)}</div></div></div><p className="data-note">共補入 {melTripFood.length + sydTripFood.length} 個主行程 PDF 出現、但未完整列於專門指南的餐飲與品飲地點；名稱與分區依 PDF 整理，營業資訊請出發前再次確認。</p></div>
+        <div className="section-head"><div><p className="eyebrow">COFFEE & TABLE</p><h2>雙城口袋名單</h2></div><p>用子分類快速查看咖啡、正餐、甜點、市場小吃或酒莊品飲。</p></div>
+        <div className="food-filters" role="group" aria-label="篩選美食分類">{foodCategories.map(category=><button key={category} className={foodFilter===category?"active":""} onClick={()=>setFoodFilter(category)} aria-pressed={foodFilter===category}>{category}</button>)}</div>
+        {(foodFilter==="全部"||foodFilter==="咖啡／早午餐")&&<div className="food-block"><div className="food-title"><span>MEL</span><div><h3>Melbourne Coffee Trail</h3><p>CBD 10 間特色咖啡店</p></div></div><div className="card-grid">{melCoffee.map((x,i)=><article className="place-card" key={x[0]}><small>{String(i+1).padStart(2,"0")} · COFFEE</small><h4>{x[0]}</h4><b>{x[1]}</b><p>{x[2]}</p><MapLink query={`${x[0]} Melbourne`}/></article>)}</div></div>}
+        {visibleSydneyFood.length>0&&<div className="food-block"><div className="food-title coral"><span>SYD</span><div><h3>Sydney Food Guide</h3><p>{foodFilter==="全部"?"精選 21 間咖啡、早午餐、正餐與甜點":`${foodFilter} · ${visibleSydneyFood.length} 間`}</p></div></div><div className="restaurant-list">{visibleSydneyFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><h4>{x[0]}</h4><p>{x[2]}</p></div><b>{x[3]}</b><MapLink query={`${x[0]} Sydney`}/></article>)}</div><p className="data-note">價格為預估範圍；營業時間與菜單請在前往前確認。</p></div>}
+        {(visibleMelTripFood.length>0||visibleSydTripFood.length>0)&&<div className="food-block trip-food-block"><div className="section-head compact"><div><p className="eyebrow">FROM THE MAIN ITINERARY</p><h3>行程順路美食</h3></div><p>以下餐飲與品飲地點來自主行程 PDF，與上方兩份專門指南分開整理。</p></div><div className={`trip-food-columns ${(!visibleMelTripFood.length||!visibleSydTripFood.length)?"single":""}`}>{visibleMelTripFood.length>0&&<div><h4>Melbourne · {visibleMelTripFood.length} 間</h4><div className="trip-food-grid">{visibleMelTripFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p></div><MapLink query={`${x[0]} Melbourne`}/></article>)}</div></div>}{visibleSydTripFood.length>0&&<div><h4>Sydney & NSW · {visibleSydTripFood.length} 間</h4><div className="trip-food-grid">{visibleSydTripFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p></div><MapLink query={`${x[0]} Sydney`}/></article>)}</div></div>}</div><p className="data-note">目前顯示「{foodFilter}」分類；名稱與分區依 PDF 整理，營業資訊請出發前再次確認。</p></div>}
       </section>
 
       <section className="section checklist" id="checklist">
