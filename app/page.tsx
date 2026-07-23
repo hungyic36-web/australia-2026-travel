@@ -19,7 +19,7 @@ const days: Day[] = [
   { day: 1, date: "8/8", weekday: "六", city: "移動", title: "台北出發・香港轉機", summary: "傍晚前往機場，經香港轉機飛往墨爾本。", transport: "CX531 → CX105", stops: ["TPE 19:55 出發", "HKG 22:00 抵達", "香港轉機 2 小時 20 分", "HKG 00:20 出發"] },
   { day: 2, date: "8/9", weekday: "日", city: "墨爾本", title: "抵達・South Yarra 慢遊", summary: "抵達後先安頓行李，以住宿周邊散步和採買為主。", transport: "機場接駁／電車＋步行", stops: ["MEL 11:15 抵達", "住宿 Check-in 15:00", "Prahran Market（週日 08:00–16:00）", "Toorak Road、Chapel Street、Oxford Street", "皇家植物園與河岸夜景"], food: ["Minnow Cafe", "Two Birds One Stone", "Campos Coffee"], note: "長途飛行後保留彈性；市場與店家時間請當日確認。" },
   { day: 3, date: "8/10", weekday: "一", city: "墨爾本", title: "CBD 咖啡、建築與塗鴉", summary: "從 Lune 與 Chinatown 一路走到 Flinders Street，串連經典拱廊與咖啡巷。", transport: "電車＋步行", stops: ["08:30 Lune Russell Street", "Chinatown", "10:00 州立圖書館圓頂閱覽室", "Melbourne Central 大鐘與子彈塔", "Essensorie 香氛店", "皇家拱廊、Block Arcade、Haigh’s Chocolates", "Town Hall 與聖保羅大教堂", "Hosier Lane 塗鴉街", "Flinders Street Station", "Degraves Street", "Pidapipó Gelato 收尾"], food: ["Lune Croissanterie", "Axil Coffee", "Pho Bo Ga Mekong", "Hareruya 麻糬冰", "La Petite Crêperie", "Overlay Coffee 花生咖啡"], note: "Overlay 建議 15:30 前抵達、La Petite Crêperie 約 16:00 開始營業；時間請當日確認。" },
-  { day: 4, date: "8/11", weekday: "二", city: "墨爾本", title: "Yarra Valley 熱氣球與酒莊", summary: "清晨熱氣球俯瞰葡萄園，接著品酒、起司與尋找野生袋鼠。", transport: "預約包車＋熱氣球", stops: ["Balgownie Estate 集合", "Yarra Valley 熱氣球（飛行約 1 小時）", "Balgownie Estate 早餐", "Yering Station", "Yarra Valley Dairy", "Punt Road Wines", "St Huberts Cellar Door 午餐", "Domaine Chandon", "Yarra Valley Chocolaterie & Ice Creamery", "野生袋鼠觀察"], note: "熱氣球受天候影響大，前一晚確認集合與取消通知；飲酒後勿駕車。" },
+  { day: 4, date: "8/11", weekday: "二", city: "墨爾本", title: "Yarra Valley 熱氣球與酒莊", summary: "清晨熱氣球俯瞰葡萄園，接著品酒、起司與尋找野生袋鼠。", transport: "預約包車＋熱氣球", stops: ["Balgownie Estate 集合", "Yarra Valley 熱氣球（飛行約 1 小時）", "Restaurant 1309 at Balgownie Estate 早餐", "Yering Station", "Yarra Valley Dairy", "Punt Road Wines", "St Huberts Cellar Door 午餐", "Domaine Chandon", "The Chocolateries Yarra Valley", "野生袋鼠觀察"], note: "熱氣球受天候影響大，前一晚確認集合與取消通知；飲酒後勿駕車。" },
   { day: 5, date: "8/12", weekday: "三", city: "墨爾本", title: "Great Ocean Road 大洋路", summary: "沿海岸公路經 Geelong、紀念拱門與 Lorne，前往十二門徒岩。", transport: "包車・單程約 3 小時以上", stops: ["Geelong", "Great Ocean Road Memorial Arch", "Lorne 小鎮", "沿岸觀景點", "十二門徒岩", "Loch Ard Gorge 周邊"], note: "大洋路全長約 240 km；冬季日照短，穿防風防雨外套並預留車程，容易暈車者先準備暈車藥。" },
   { day: 6, date: "8/13", weekday: "四", city: "墨爾本", title: "北區藝文・市場與大學", summary: "從 Queen Victoria Market 走訪 Carlton、Lygon Street、墨爾本大學與 Fitzroy。", transport: "電車＋步行", stops: ["06:00–15:00 Queen Victoria Market", "Carlton Gardens 與皇家展覽館", "Melbourne Museum", "Lygon Street 小義大利", "墨爾本大學", "Fitzroy 文青街區", "王子橋亞拉河夜景", "有時間可加 Spencer Outlet"], food: ["Brunetti Classico", "DOC Pizza", "Tiamo", "Donnini’s"], note: <>QVM 週一、週三休市，8/13 為週四；出發前再確認當週開市資訊。<a href="https://qvm.com.au/" target="_blank" rel="noreferrer" style={{ display: "block", marginTop: "10px", fontSize: "13px", textDecoration: "underline" }}>QVM 官網 ↗</a></> },
   { day: 7, date: "8/14", weekday: "五", city: "墨爾本", title: "Phillip Island 小企鵝", summary: "彩虹小屋、野生動物與海岸景觀，晚上觀賞小企鵝歸巢。", transport: "包車・市區至島上約 1.5–2 小時", stops: ["Brighton Bathing Boxes", "Maru Koala & Animal Park", "Churchill Island Heritage Farm", "Nobbies Centre", "Penguin Parade 小企鵝歸巢"], note: "海邊夜間寒冷，準備保暖防風衣物；企鵝歸巢依現場規範禁止攝影。" },
@@ -44,7 +44,7 @@ const dayRoutes: Record<number, DayRoute> = {
   1: { area: "台北 → 香港", mode: "transit", stops: ["Taiwan Taoyuan International Airport", "Hong Kong International Airport"] },
   2: { area: "Melbourne · South Yarra", mode: "transit", stops: ["Melbourne Airport", "South Yarra", "Prahran Market", "Royal Botanic Gardens Victoria"] },
   3: { area: "Melbourne CBD", mode: "walking", stops: ["Lune Croissanterie Russell Street", "State Library Victoria", "Melbourne Central", "Block Arcade", "Hosier Lane", "Flinders Street Station", "Pidapipó Gelateria Degraves Street"] },
-  4: { area: "Yarra Valley", mode: "driving", stops: ["Balgownie Estate Yarra Valley", "Yering Station", "Yarra Valley Dairy", "Punt Road Wines", "St Huberts Cellar Door", "Domaine Chandon", "Yarra Valley Chocolaterie & Ice Creamery"] },
+  4: { area: "Yarra Valley", mode: "driving", stops: ["Restaurant 1309 at Balgownie Estate", "Yering Station", "Yarra Valley Dairy", "Punt Road Wines", "St Huberts Cellar Door", "Domaine Chandon", "The Chocolateries Yarra Valley"] },
   5: { area: "Great Ocean Road", mode: "driving", stops: ["Geelong", "Great Ocean Road Memorial Arch", "Lorne", "Twelve Apostles", "Loch Ard Gorge"] },
   6: { area: "North Melbourne · Fitzroy", mode: "transit", stops: ["Queen Victoria Market", "Carlton Gardens", "Melbourne Museum", "Lygon Street", "University of Melbourne", "Fitzroy", "Princes Bridge Melbourne"] },
   7: { area: "Phillip Island", mode: "driving", stops: ["Brighton Bathing Boxes", "Maru Koala and Animal Park", "Churchill Island Heritage Farm", "The Nobbies", "Penguin Parade"] },
@@ -106,14 +106,21 @@ const melTripFood = [
   ["La Petite Crêperie", "CBD", "法式薄餅"],
   ["Overlay Coffee", "CBD", "花生咖啡"],
   ["Pidapipó Gelateria", "CBD", "義式冰淇淋"],
+  ["Haigh’s Chocolates", "Block Arcade", "巧克力、甜點"],
+  ["Restaurant 1309 at Balgownie Estate", "Yarra Valley", "早餐、正餐"],
+  ["Yering Station", "Yarra Valley", "酒莊、葡萄酒品飲"],
   ["Yarra Valley Dairy", "Yarra Valley", "手工起司"],
+  ["Punt Road Wines", "Yarra Valley", "酒莊、葡萄酒品飲"],
   ["St Huberts Cellar Door", "Yarra Valley", "酒莊午餐"],
+  ["Domaine Chandon", "Yarra Valley", "酒莊、氣泡酒品飲"],
+  ["The Chocolateries Yarra Valley", "Yarra Valley", "巧克力、冰淇淋、甜點"],
   ["Brunetti Classico", "Carlton", "義式甜點"],
   ["DOC Pizza", "Carlton", "義式披薩"],
   ["Tiamo", "Carlton", "義大利料理"],
   ["Donnini’s", "Carlton", "義大利料理"],
   ["ST. ALi", "South Melbourne", "咖啡"],
   ["Padre Coffee", "South Melbourne Market", "咖啡"],
+  ["Deli Nuts", "South Melbourne Market", "堅果零食、伴手禮"],
   ["Aptus Seafood", "South Melbourne Market", "生蠔、海鮮"],
   ["Simply Spanish", "South Melbourne Market", "海鮮燉飯"],
   ["Agathé Pâtisserie", "South Melbourne Market", "法式可頌"],
@@ -283,7 +290,7 @@ export default function Home() {
         <div className="section-head"><div><p className="eyebrow">COFFEE & TABLE</p><h2>雙城口袋名單</h2></div></div>
         <div className="food-block"><div className="food-title"><span>MEL</span><div><h3>Melbourne Coffee Trail</h3><p>CBD 10 間特色咖啡店</p></div></div><div className="card-grid">{melCoffee.map((x,i)=><article className="place-card" key={x[0]}><small>{String(i+1).padStart(2,"0")} · COFFEE</small><h4>{x[0]}</h4><b>{x[1]}</b><p>{x[2]}</p><MapLink query={`${x[0]} Melbourne`}/></article>)}</div></div>
         <div className="food-block"><div className="food-title coral"><span>SYD</span><div><h3>Sydney Food Guide</h3><p>精選 21 間咖啡、早午餐、正餐與甜點</p></div></div><div className="restaurant-list">{sydFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><h4>{x[0]}</h4><p>{x[2]}</p></div><b>{x[3]}</b><MapLink query={`${x[0]} Sydney`}/></article>)}</div><p className="data-note">價格為預估範圍；營業時間與菜單請在前往前確認。</p></div>
-        <div className="food-block trip-food-block"><div className="section-head compact"><div><p className="eyebrow">FROM THE MAIN ITINERARY</p><h3>行程順路美食</h3></div><p>以下店家來自主行程 PDF，與上方兩份專門指南分開整理，避免漏掉市場攤位、每日早餐、午餐與甜點。</p></div><div className="trip-food-columns"><div><h4>Melbourne · {melTripFood.length} 間</h4><div className="trip-food-grid">{melTripFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p></div><MapLink query={`${x[0]} Melbourne`}/></article>)}</div></div><div><h4>Sydney & NSW · {sydTripFood.length} 間</h4><div className="trip-food-grid">{sydTripFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p></div><MapLink query={`${x[0]} Sydney`}/></article>)}</div></div></div><p className="data-note">共補入 {melTripFood.length + sydTripFood.length} 間主行程 PDF 出現、但未完整列於專門指南的店家；名稱與分區依 PDF 整理，營業資訊請出發前再次確認。</p></div>
+        <div className="food-block trip-food-block"><div className="section-head compact"><div><p className="eyebrow">FROM THE MAIN ITINERARY</p><h3>行程順路美食</h3></div><p>以下餐飲與品飲地點來自主行程 PDF，與上方兩份專門指南分開整理，避免漏掉市場攤位、早餐、正餐、甜點與酒莊。</p></div><div className="trip-food-columns"><div><h4>Melbourne · {melTripFood.length} 間</h4><div className="trip-food-grid">{melTripFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p></div><MapLink query={`${x[0]} Melbourne`}/></article>)}</div></div><div><h4>Sydney & NSW · {sydTripFood.length} 間</h4><div className="trip-food-grid">{sydTripFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p></div><MapLink query={`${x[0]} Sydney`}/></article>)}</div></div></div><p className="data-note">共補入 {melTripFood.length + sydTripFood.length} 個主行程 PDF 出現、但未完整列於專門指南的餐飲與品飲地點；名稱與分區依 PDF 整理，營業資訊請出發前再次確認。</p></div>
       </section>
 
       <section className="section checklist" id="checklist">
