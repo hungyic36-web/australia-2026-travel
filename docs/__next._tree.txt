@@ -1,2 +1,2 @@
-:HL["/australia-2026-travel/_next/static/chunks/0shbzxk_~2x68.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"i-yPACpJPNxxErrgjY9CW"}
+:HL["/australia-2026-travel/_next/static/chunks/0fwqgsjoen9xd.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"s-Ni_rQDiEH9SxQWm3UyT"}
