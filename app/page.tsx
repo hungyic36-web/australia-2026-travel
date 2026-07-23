@@ -34,6 +34,31 @@ const days: Day[] = [
   { day: 16, date: "8/23", weekday: "日", city: "移動", title: "香港轉機・抵達台北", summary: "清晨抵達香港，轉機返回台北。", transport: "CX138 → CX564", stops: ["HKG 05:10 抵達", "香港轉機約 3 小時", "HKG 08:10 出發", "TPE 10:00 抵達"] },
 ];
 
+type DayRoute = {
+  area: string;
+  mode: "driving" | "walking" | "transit";
+  stops: string[];
+};
+
+const dayRoutes: Record<number, DayRoute> = {
+  1: { area: "台北 → 香港", mode: "transit", stops: ["Taiwan Taoyuan International Airport", "Hong Kong International Airport"] },
+  2: { area: "Melbourne · South Yarra", mode: "transit", stops: ["Melbourne Airport", "South Yarra", "Prahran Market", "Royal Botanic Gardens Victoria"] },
+  3: { area: "Melbourne CBD", mode: "walking", stops: ["Lune Croissanterie Russell Street", "State Library Victoria", "Melbourne Central", "Block Arcade", "Hosier Lane", "Flinders Street Station", "Pidapipó Gelateria Degraves Street"] },
+  4: { area: "Yarra Valley", mode: "driving", stops: ["Balgownie Estate Yarra Valley", "Yering Station", "Yarra Valley Dairy", "Punt Road Wines", "St Huberts Cellar Door", "Domaine Chandon", "Yarra Valley Chocolaterie & Ice Creamery"] },
+  5: { area: "Great Ocean Road", mode: "driving", stops: ["Geelong", "Great Ocean Road Memorial Arch", "Lorne", "Twelve Apostles", "Loch Ard Gorge"] },
+  6: { area: "North Melbourne · Fitzroy", mode: "transit", stops: ["Queen Victoria Market", "Carlton Gardens", "Melbourne Museum", "Lygon Street", "University of Melbourne", "Fitzroy", "Princes Bridge Melbourne"] },
+  7: { area: "Phillip Island", mode: "driving", stops: ["Brighton Bathing Boxes", "Maru Koala and Animal Park", "Churchill Island Heritage Farm", "The Nobbies", "Penguin Parade"] },
+  8: { area: "South Melbourne", mode: "transit", stops: ["National Gallery of Victoria", "Royal Botanic Gardens Victoria", "South Melbourne Market", "DFO South Wharf", "Chapel Street"] },
+  9: { area: "Ballarat · Sovereign Hill", mode: "transit", stops: ["Southern Cross Station", "Ballarat Station", "Sovereign Hill", "Lake Wendouree"] },
+  10: { area: "Melbourne → Sydney", mode: "transit", stops: ["Melbourne Airport", "Sydney Airport", "Rydges Darling Square", "Darling Harbour", "Queen Victoria Building"] },
+  11: { area: "Sydney Harbour", mode: "walking", stops: ["Circular Quay", "Sydney Opera House", "Mrs Macquarie's Chair", "The Mint Sydney", "Hyde Park Sydney", "St Mary's Cathedral Sydney"] },
+  12: { area: "Blue Mountains", mode: "transit", stops: ["Central Station Sydney", "Katoomba Station", "Scenic World", "Echo Point Lookout", "Leura"] },
+  13: { area: "Gerringong · Kiama", mode: "transit", stops: ["Central Station Sydney", "Gerringong", "Tasma Drive Gerringong", "Kiama", "Kiama Blowhole"] },
+  14: { area: "Sydney Inner West", mode: "transit", stops: ["Sydney Fish Market", "University of Sydney", "Newtown Sydney", "Chinatown Friday Night Market Sydney"] },
+  15: { area: "North Sydney · CBD", mode: "transit", stops: ["Kirribilli", "The Rocks Sydney", "Queen Victoria Building", "Black Star Pastry Sydney", "Sydney Airport"] },
+  16: { area: "香港 → 台北", mode: "transit", stops: ["Hong Kong International Airport", "Taiwan Taoyuan International Airport"] },
+};
+
 const melCoffee = [
   ["Patricia Coffee Brewers", "Double Ristretto Flat White、季節手沖", "巷弄站飲、極簡菜單"],
   ["Brother Baba Budan", "Single Origin Flat White", "Seven Seeds 系、天花板木椅"],
@@ -71,6 +96,52 @@ const sydFood = [
   ["Joe Black Cafe", "Surry Hills", "Big Breakfast", "AUD 20–35"],
 ];
 
+const melTripFood = [
+  ["Minnow Cafe", "South Yarra", "早午餐、咖啡"],
+  ["Two Birds One Stone", "South Yarra", "精緻早午餐、手沖咖啡"],
+  ["Campos Coffee", "South Yarra", "咖啡"],
+  ["Lune Croissanterie", "CBD", "經典原味與杏仁可頌"],
+  ["Pho Bo Ga Mekong", "CBD", "越南河粉"],
+  ["Hareruya", "CBD", "麻糬冰"],
+  ["La Petite Crêperie", "CBD", "法式薄餅"],
+  ["Overlay Coffee", "CBD", "花生咖啡"],
+  ["Pidapipó Gelateria", "CBD", "義式冰淇淋"],
+  ["Yarra Valley Dairy", "Yarra Valley", "手工起司"],
+  ["St Huberts Cellar Door", "Yarra Valley", "酒莊午餐"],
+  ["Brunetti Classico", "Carlton", "義式甜點"],
+  ["DOC Pizza", "Carlton", "義式披薩"],
+  ["Tiamo", "Carlton", "義大利料理"],
+  ["Donnini’s", "Carlton", "義大利料理"],
+  ["ST. ALi", "South Melbourne", "咖啡"],
+  ["Padre Coffee", "South Melbourne Market", "咖啡"],
+  ["Aptus Seafood", "South Melbourne Market", "生蠔、海鮮"],
+  ["Simply Spanish", "South Melbourne Market", "海鮮燉飯"],
+  ["Agathé Pâtisserie", "South Melbourne Market", "法式可頌"],
+  ["Cannoleria", "South Melbourne Market", "奶油捲"],
+  ["Baba Su", "South Melbourne Market", "斑蘭牛角包"],
+  ["Mama Tran Dumplings", "South Melbourne Market", "小籠包、煎餃"],
+  ["Dim Sim King", "South Melbourne Market", "港式點心"],
+  ["Claypots Seafood Bar", "South Melbourne Market", "海鮮煲"],
+];
+
+const sydTripFood = [
+  ["Ho Jiak Haymarket", "Haymarket", "馬來西亞料理"],
+  ["Mamak", "Haymarket", "馬來西亞料理、Roti"],
+  ["ASLAN Coffee", "The Rocks", "印尼精品咖啡"],
+  ["Bourke Street Bakery", "Circular Quay", "鹹派、烘焙"],
+  ["The Mint Café", "Sydney CBD", "咖啡、輕食"],
+  ["Wayzgoose Diner", "Leura", "下午茶"],
+  ["Diggies", "Kiama", "海景早午餐"],
+  ["Penny Whistlers", "Kiama", "海景餐廳"],
+  ["The Hill Bar & Kitchen", "Gerringong", "午餐"],
+  ["Vic’s Meat Market", "Sydney Fish Market", "牛肉三明治"],
+  ["Campos Coffee", "Newtown", "咖啡"],
+  ["Emperor’s Puffs", "Chinatown", "奶油泡芙"],
+  ["Celsius Coffee Co.", "Kirribilli", "海景早餐"],
+  ["The Grounds of the City", "Sydney CBD", "早午餐、正餐"],
+  ["Black Star Pastry", "Sydney CBD", "西瓜草莓蛋糕"],
+];
+
 const links = {
   ptv: "https://www.ptv.vic.gov.au/",
   nsw: "https://transportnsw.info/trip",
@@ -88,6 +159,36 @@ const downloadDocs = [
 
 function MapLink({ query }: { query: string }) {
   return <a className="map-link" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query + ", Australia")}`} target="_blank" rel="noreferrer" aria-label={`在 Google Maps 開啟 ${query}`}><span className="pin-icon" aria-hidden="true"></span><span>開啟地圖</span><span className="external-arrow" aria-hidden="true">↗</span></a>;
+}
+
+function routeUrl(route: DayRoute) {
+  const [origin, ...rest] = route.stops;
+  const destination = rest.pop() ?? origin;
+  const waypoints = rest.join("|");
+  const params = new URLSearchParams({ api: "1", origin, destination, travelmode: route.mode });
+  if (waypoints) params.set("waypoints", waypoints);
+  return `https://www.google.com/maps/dir/?${params.toString()}`;
+}
+
+function DayMap({ route }: { route: DayRoute }) {
+  const mapQuery = encodeURIComponent(route.area);
+  return (
+    <aside className="day-map" aria-label={`${route.area} 當日路線地圖`}>
+      <div className="map-frame">
+        <iframe
+          title={`${route.area} 地圖`}
+          src={`https://maps.google.com/maps?q=${mapQuery}&z=11&output=embed`}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+      </div>
+      <div className="map-route-head"><span>ROUTE MAP</span><strong>{route.area}</strong></div>
+      <div className="map-route-stops">
+        {route.stops.map((stop, index) => <span key={stop}><b>{index + 1}</b>{stop}</span>)}
+      </div>
+      <a className="route-link" href={routeUrl(route)} target="_blank" rel="noreferrer">在 Google Maps 開啟完整路線 ↗</a>
+    </aside>
+  );
 }
 
 export default function Home() {
@@ -160,7 +261,7 @@ export default function Home() {
             <button className="day-summary" onClick={()=>setOpenDay(openDay===d.day?0:d.day)} aria-expanded={openDay===d.day}>
               <span className="day-no">D{String(d.day).padStart(2,"0")}</span><span className="day-date">{d.date}<small>{d.weekday}</small></span><span className="day-title"><small>{d.city}</small>{d.title}</span><span className="toggle">{openDay===d.day?"−":"＋"}</span>
             </button>
-            {openDay===d.day && <div className="day-detail"><div className="detail-intro"><p>{d.summary}</p><span>{d.transport}</span></div><ol>{d.stops.map((s,i)=><li key={s}><b>{String(i+1).padStart(2,"0")}</b><span>{s}</span></li>)}</ol>{d.food&&<div className="food-line"><b>順路口袋名單</b>{d.food.map(f=><span key={f}>{f}</span>)}</div>}{d.note&&<p className="note">NOTE — {d.note}</p>}</div>}
+            {openDay===d.day && <div className="day-detail"><div className="detail-intro"><p>{d.summary}</p><span>{d.transport}</span></div><div className="day-detail-grid"><div className="day-plan"><ol>{d.stops.map((s,i)=><li key={s}><b>{String(i+1).padStart(2,"0")}</b><span>{s}</span></li>)}</ol>{d.food&&<div className="food-line"><b>順路口袋名單</b>{d.food.map(f=><span key={f}>{f}</span>)}</div>}{d.note&&<p className="note">NOTE — {d.note}</p>}</div><DayMap route={dayRoutes[d.day]}/></div></div>}
           </article>)}
         </div>
       </section>
@@ -182,6 +283,7 @@ export default function Home() {
         <div className="section-head"><div><p className="eyebrow">COFFEE & TABLE</p><h2>雙城口袋名單</h2></div></div>
         <div className="food-block"><div className="food-title"><span>MEL</span><div><h3>Melbourne Coffee Trail</h3><p>CBD 10 間特色咖啡店</p></div></div><div className="card-grid">{melCoffee.map((x,i)=><article className="place-card" key={x[0]}><small>{String(i+1).padStart(2,"0")} · COFFEE</small><h4>{x[0]}</h4><b>{x[1]}</b><p>{x[2]}</p><MapLink query={`${x[0]} Melbourne`}/></article>)}</div></div>
         <div className="food-block"><div className="food-title coral"><span>SYD</span><div><h3>Sydney Food Guide</h3><p>精選 21 間咖啡、早午餐、正餐與甜點</p></div></div><div className="restaurant-list">{sydFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><h4>{x[0]}</h4><p>{x[2]}</p></div><b>{x[3]}</b><MapLink query={`${x[0]} Sydney`}/></article>)}</div><p className="data-note">價格為預估範圍；營業時間與菜單請在前往前確認。</p></div>
+        <div className="food-block trip-food-block"><div className="section-head compact"><div><p className="eyebrow">FROM THE MAIN ITINERARY</p><h3>行程順路美食</h3></div><p>以下店家來自主行程 PDF，與上方兩份專門指南分開整理，避免漏掉市場攤位、每日早餐、午餐與甜點。</p></div><div className="trip-food-columns"><div><h4>Melbourne · {melTripFood.length} 間</h4><div className="trip-food-grid">{melTripFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p></div><MapLink query={`${x[0]} Melbourne`}/></article>)}</div></div><div><h4>Sydney & NSW · {sydTripFood.length} 間</h4><div className="trip-food-grid">{sydTripFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p></div><MapLink query={`${x[0]} Sydney`}/></article>)}</div></div></div><p className="data-note">共補入 {melTripFood.length + sydTripFood.length} 間主行程 PDF 出現、但未完整列於專門指南的店家；名稱與分區依 PDF 整理，營業資訊請出發前再次確認。</p></div>
       </section>
 
       <section className="section checklist" id="checklist">

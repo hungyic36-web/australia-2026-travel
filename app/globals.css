@@ -111,3 +111,130 @@
   .topbar nav{max-width:none}
   .hero h1{font-size:15vw}
 }
+
+/* Daily route maps */
+.day-detail-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);
+  gap:36px;
+  align-items:start
+}
+.day-plan{min-width:0}
+.day-map{
+  position:sticky;
+  top:118px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.58)
+}
+.map-frame{height:260px;background:#e8e7df}
+.map-frame iframe{display:block;width:100%;height:100%;border:0}
+.map-route-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:20px 22px 15px
+}
+.map-route-head strong{font-family:var(--serif);font-size:18px;font-weight:500}
+.route-link{
+  flex:0 0 auto;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:8px 12px;
+  color:var(--ink);
+  font-size:12px;
+  text-decoration:none;
+  white-space:nowrap
+}
+.route-link:hover{border-color:var(--forest);color:var(--forest)}
+.map-route-stops{display:flex;flex-wrap:wrap;gap:8px;padding:0 22px 18px}
+.map-route-stops>span{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border-radius:999px;
+  background:var(--cream);
+  padding:7px 10px;
+  font-size:12px;
+  line-height:1.3
+}
+.map-route-stops>span b{
+  display:grid;
+  place-items:center;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:var(--forest);
+  color:#fff;
+  font-size:10px
+}
+.day-map>.route-link{margin:0 22px 22px}
+
+/* Food found in the day-by-day itinerary PDFs */
+.section-head.compact{margin-bottom:28px}
+.section-head.compact h3{max-width:760px}
+.trip-food-columns{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:44px
+}
+.trip-food-columns>div>h4{
+  margin:0 0 18px;
+  font-family:var(--serif);
+  font-size:25px;
+  font-weight:500
+}
+.trip-food-grid{border-top:1px solid var(--line)}
+.trip-food-grid>article{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:18px;
+  align-items:center;
+  padding:15px 0;
+  border-bottom:1px solid var(--line)
+}
+.trip-food-grid>article>span{font-family:var(--serif);font-size:18px;color:var(--forest)}
+.trip-food-grid>article small{display:block;margin-bottom:4px;color:var(--forest);font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.trip-food-grid>article strong{display:block;font-size:15px;font-weight:500}
+.trip-food-grid>article p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.trip-food-grid>article a{
+  color:var(--forest);
+  font-size:12px;
+  text-decoration:none;
+  white-space:nowrap
+}
+
+/* Keep city badges circular even when mobile text needs more room. */
+.food-title>span{
+  flex:0 0 100px;
+  width:100px;
+  min-width:100px;
+  height:100px;
+  aspect-ratio:1/1
+}
+
+@media(max-width:1000px){
+  .day-detail-grid{grid-template-columns:minmax(0,1fr) minmax(270px,.75fr);gap:24px}
+  .day-detail{padding-right:28px}
+  .trip-food-columns{gap:28px}
+}
+
+@media(max-width:760px){
+  .day-detail-grid{display:block}
+  .day-map{position:static;margin-top:28px}
+  .map-frame{height:220px}
+  .map-route-head{padding:17px 17px 14px}
+  .map-route-stops{padding:0 17px 16px}
+  .day-map>.route-link{margin:0 17px 17px}
+  .trip-food-columns{grid-template-columns:1fr;gap:38px}
+  .food-title{align-items:center;gap:18px}
+  .food-title>span{
+    flex-basis:82px;
+    width:82px;
+    min-width:82px;
+    height:82px;
+    font-size:26px
+  }
+  .food-title h3{font-size:clamp(29px,9vw,44px);line-height:1.04}
+}
