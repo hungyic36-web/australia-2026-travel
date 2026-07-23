@@ -58,6 +58,56 @@
   .stop-intro-toggle em{font-size:10px}
 }
 
+/* Daily food jumps and expandable food summaries */
+.food-line button{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border:1px solid transparent;
+  border-radius:999px;
+  padding:7px 12px;
+  background:white;
+  color:var(--ink);
+  font-size:12px;
+  cursor:pointer
+}
+.food-line button:hover,.food-line button:focus-visible{
+  border-color:var(--green);
+  color:var(--green)
+}
+.food-line button span{padding:0;background:none}
+.food-details{margin-top:10px}
+.food-details>button{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--ink);
+  font-size:11px;
+  cursor:pointer
+}
+.food-details>button:hover,.food-details>button:focus-visible{border-color:var(--green)}
+.food-details>p{
+  margin:8px 0 0!important;
+  padding:10px 12px;
+  border-left:2px solid var(--green);
+  background:rgba(255,255,255,.42);
+  color:var(--ink)!important;
+  font-size:12px!important;
+  line-height:1.7!important
+}
+.place-card,.restaurant-list article,.trip-food-grid>article{scroll-margin-top:96px}
+.food-target{
+  outline:3px solid var(--coral);
+  outline-offset:3px
+}
+
+@media(max-width:680px){
+  .food-line button{width:100%;justify-content:space-between}
+  .food-target{outline-width:2px;outline-offset:2px}
+}
+
 /* Compact personal travel handbook */
 .hero{min-height:600px;padding:7vw 5vw 5vw;grid-template-columns:1.3fr .7fr}
 .eyebrow{font-size:11px;letter-spacing:.18em}

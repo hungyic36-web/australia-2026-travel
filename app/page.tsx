@@ -143,6 +143,7 @@ const sydTripFood = [
   ["Penny Whistlers", "Kiama", "海景餐廳"],
   ["The Hill Bar & Kitchen", "Gerringong", "午餐"],
   ["Vic’s Meat Market", "Sydney Fish Market", "牛肉三明治"],
+  ["烤生蠔", "Sydney Fish Market", "市場海鮮小吃"],
   ["Campos Coffee", "Newtown", "咖啡"],
   ["Emperor’s Puffs", "Chinatown", "奶油泡芙"],
   ["Celsius Coffee Co.", "Kirribilli", "海景早餐"],
@@ -179,6 +180,72 @@ function getFoodCategory(name: string, description: string, area = ""): FoodCate
 
 function foodMatches(category: FoodCategory, name: string, description: string, area = "") {
   return category === "全部" || getFoodCategory(name, description, area) === category;
+}
+
+type FoodScope = "mel-coffee" | "mel-trip" | "syd-guide" | "syd-trip";
+
+function foodCardId(scope: FoodScope, name: string) {
+  const slug = name
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\u4e00-\u9fff]+/g, "-")
+    .replace(/^-|-$/g, "");
+  return `food-${scope}-${slug}`;
+}
+
+const foodTargets: Record<string, string> = {
+  "Minnow Cafe": foodCardId("mel-trip", "Minnow Cafe"),
+  "Two Birds One Stone": foodCardId("mel-trip", "Two Birds One Stone"),
+  "Campos Coffee|2": foodCardId("mel-trip", "Campos Coffee"),
+  "Lune Croissanterie": foodCardId("mel-trip", "Lune Croissanterie"),
+  "Axil Coffee": foodCardId("mel-coffee", "Axil Coffee Roasters"),
+  "Pho Bo Ga Mekong": foodCardId("mel-trip", "Pho Bo Ga Mekong"),
+  "Hareruya 麻糬冰": foodCardId("mel-trip", "Hareruya"),
+  "La Petite Crêperie": foodCardId("mel-trip", "La Petite Crêperie"),
+  "Overlay Coffee 花生咖啡": foodCardId("mel-trip", "Overlay Coffee"),
+  "Brunetti Classico": foodCardId("mel-trip", "Brunetti Classico"),
+  "DOC Pizza": foodCardId("mel-trip", "DOC Pizza"),
+  "Tiamo": foodCardId("mel-trip", "Tiamo"),
+  "Donnini’s": foodCardId("mel-trip", "Donnini’s"),
+  "ST. ALi／Padre Coffee": foodCardId("mel-trip", "ST. ALi"),
+  "Aptus Seafood": foodCardId("mel-trip", "Aptus Seafood"),
+  "Simply Spanish": foodCardId("mel-trip", "Simply Spanish"),
+  "Agathé Pâtisserie": foodCardId("mel-trip", "Agathé Pâtisserie"),
+  "Mama Tran Dumplings": foodCardId("mel-trip", "Mama Tran Dumplings"),
+  "Ho Jiak Haymarket": foodCardId("syd-trip", "Ho Jiak Haymarket"),
+  "KHAO·SOI": foodCardId("syd-guide", "KHAO·SOI"),
+  "Chat Thai": foodCardId("syd-guide", "Chat Thai"),
+  "Mamak": foodCardId("syd-trip", "Mamak"),
+  "Shortstop Coffee & Donuts": foodCardId("syd-guide", "Shortstop Coffee & Donuts"),
+  "ASLAN Coffee／Mogu Mogu": foodCardId("syd-trip", "ASLAN Coffee"),
+  "Marrickville Pork Roll": foodCardId("syd-guide", "Marrickville Pork Roll"),
+  "Wayzgoose Diner 下午茶": foodCardId("syd-trip", "Wayzgoose Diner"),
+  "Diggies": foodCardId("syd-trip", "Diggies"),
+  "Penny Whistlers": foodCardId("syd-trip", "Penny Whistlers"),
+  "Vic’s Meat Market 牛肉三明治": foodCardId("syd-trip", "Vic’s Meat Market"),
+  "烤生蠔": foodCardId("syd-trip", "烤生蠔"),
+  "Campos Coffee|14": foodCardId("syd-trip", "Campos Coffee"),
+  "Emperor’s Puffs": foodCardId("syd-trip", "Emperor’s Puffs"),
+  "Celsius Coffee Co.": foodCardId("syd-trip", "Celsius Coffee Co."),
+  "The Grounds": foodCardId("syd-trip", "The Grounds of the City"),
+  "Black Star Pastry": foodCardId("syd-trip", "Black Star Pastry"),
+};
+
+function resolveFoodTarget(day: number, label: string) {
+  return foodTargets[`${label}|${day}`] ?? foodTargets[label];
+}
+
+function FoodDetails({ summary }: { summary: string }) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <div className="food-details">
+      <button type="button" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>
+        {expanded ? "收合摘要 −" : "查看摘要 ＋"}
+      </button>
+      {expanded && <p>{summary}</p>}
+    </div>
+  );
 }
 
 function MapLink({ query }: { query: string }) {
@@ -252,10 +319,20 @@ export default function Home() {
   const [city, setCity] = useState("全部");
   const [openDay, setOpenDay] = useState(2);
   const [foodFilter, setFoodFilter] = useState<FoodCategory>("全部");
+  const [focusedFood, setFocusedFood] = useState("");
   const visibleDays = useMemo(() => city === "全部" ? days : days.filter((d) => d.city === city), [city]);
   const visibleSydneyFood = useMemo(() => sydFood.filter(x => foodMatches(foodFilter,x[0],x[2],x[1])),[foodFilter]);
   const visibleMelTripFood = useMemo(() => melTripFood.filter(x => foodMatches(foodFilter,x[0],x[2],x[1])),[foodFilter]);
   const visibleSydTripFood = useMemo(() => sydTripFood.filter(x => foodMatches(foodFilter,x[0],x[2],x[1])),[foodFilter]);
+  const jumpToFood = (day: number, label: string) => {
+    const target = resolveFoodTarget(day, label);
+    if (!target) return;
+    setFoodFilter("全部");
+    setFocusedFood(target);
+    window.setTimeout(() => {
+      document.getElementById(target)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 0);
+  };
   const tripStatus = useMemo(() => {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -322,7 +399,7 @@ export default function Home() {
             <button className="day-summary" onClick={()=>setOpenDay(openDay===d.day?0:d.day)} aria-expanded={openDay===d.day}>
               <span className="day-no">D{String(d.day).padStart(2,"0")}</span><span className="day-date">{d.date}<small>{d.weekday}</small></span><span className="day-title"><small>{d.city}</small>{d.title}</span><span className="toggle">{openDay===d.day?"−":"＋"}</span>
             </button>
-            {openDay===d.day && <div className="day-detail"><div className="detail-intro"><p>{d.summary}</p><span>{d.transport}</span></div><div className="day-detail-grid"><div className="day-plan"><ol>{d.stops.map((s,i)=><StopItem key={`${d.day}-${i}-${s}`} stop={s} index={i}/>)}</ol>{d.food&&<div className="food-line"><b>順路口袋名單</b>{d.food.map(f=><span key={f}>{f}</span>)}</div>}{d.note&&<p className="note">NOTE — {d.note}</p>}</div><DayMap route={dayRoutes[d.day]} day={d.day}/></div></div>}
+            {openDay===d.day && <div className="day-detail"><div className="detail-intro"><p>{d.summary}</p><span>{d.transport}</span></div><div className="day-detail-grid"><div className="day-plan"><ol>{d.stops.map((s,i)=><StopItem key={`${d.day}-${i}-${s}`} stop={s} index={i}/>)}</ol>{d.food&&<div className="food-line"><b>順路口袋名單</b>{d.food.map(f=>resolveFoodTarget(d.day,f)?<button type="button" key={f} onClick={()=>jumpToFood(d.day,f)}>{f}<span aria-hidden="true">↓</span></button>:<span key={f}>{f}</span>)}</div>}{d.note&&<p className="note">NOTE — {d.note}</p>}</div><DayMap route={dayRoutes[d.day]} day={d.day}/></div></div>}
           </article>)}
         </div>
       </section>
@@ -343,9 +420,9 @@ export default function Home() {
       <section className="section food" id="food">
         <div className="section-head"><div><p className="eyebrow">COFFEE & TABLE</p><h2>雙城口袋名單</h2></div><p>用子分類快速查看咖啡、正餐、甜點、市場小吃或酒莊品飲。</p></div>
         <div className="food-filters" role="group" aria-label="篩選美食分類">{foodCategories.map(category=><button key={category} className={foodFilter===category?"active":""} onClick={()=>setFoodFilter(category)} aria-pressed={foodFilter===category}>{category}</button>)}</div>
-        {(foodFilter==="全部"||foodFilter==="咖啡／早午餐")&&<div className="food-block"><div className="food-title"><span>MEL</span><div><h3>Melbourne Coffee Trail</h3><p>CBD 10 間特色咖啡店</p></div></div><div className="card-grid">{melCoffee.map((x,i)=><article className="place-card" key={x[0]}><small>{String(i+1).padStart(2,"0")} · COFFEE</small><h4>{x[0]}</h4><b>{x[1]}</b><p>{x[2]}</p><MapLink query={`${x[0]} Melbourne`}/></article>)}</div></div>}
-        {visibleSydneyFood.length>0&&<div className="food-block"><div className="food-title coral"><span>SYD</span><div><h3>Sydney Food Guide</h3><p>{foodFilter==="全部"?"精選 21 間咖啡、早午餐、正餐與甜點":`${foodFilter} · ${visibleSydneyFood.length} 間`}</p></div></div><div className="restaurant-list">{visibleSydneyFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><h4>{x[0]}</h4><p>{x[2]}</p></div><b>{x[3]}</b><MapLink query={`${x[0]} Sydney`}/></article>)}</div><p className="data-note">價格為預估範圍；營業時間與菜單請在前往前確認。</p></div>}
-        {(visibleMelTripFood.length>0||visibleSydTripFood.length>0)&&<div className="food-block trip-food-block"><div className="section-head compact"><div><p className="eyebrow">FROM THE MAIN ITINERARY</p><h3>行程順路美食</h3></div><p>以下餐飲與品飲地點來自主行程 PDF，與上方兩份專門指南分開整理。</p></div><div className={`trip-food-columns ${(!visibleMelTripFood.length||!visibleSydTripFood.length)?"single":""}`}>{visibleMelTripFood.length>0&&<div><h4>Melbourne · {visibleMelTripFood.length} 間</h4><div className="trip-food-grid">{visibleMelTripFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p></div><MapLink query={`${x[0]} Melbourne`}/></article>)}</div></div>}{visibleSydTripFood.length>0&&<div><h4>Sydney & NSW · {visibleSydTripFood.length} 間</h4><div className="trip-food-grid">{visibleSydTripFood.map((x,i)=><article key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p></div><MapLink query={`${x[0]} Sydney`}/></article>)}</div></div>}</div><p className="data-note">目前顯示「{foodFilter}」分類；名稱與分區依 PDF 整理，營業資訊請出發前再次確認。</p></div>}
+        {(foodFilter==="全部"||foodFilter==="咖啡／早午餐")&&<div className="food-block"><div className="food-title"><span>MEL</span><div><h3>Melbourne Coffee Trail</h3><p>CBD 10 間特色咖啡店</p></div></div><div className="card-grid">{melCoffee.map((x,i)=>{const id=foodCardId("mel-coffee",x[0]);return <article id={id} className={`place-card ${focusedFood===id?"food-target":""}`} key={x[0]}><small>{String(i+1).padStart(2,"0")} · COFFEE</small><h4>{x[0]}</h4><b>{x[1]}</b><p>{x[2]}</p><FoodDetails summary={`推薦品項：${x[1]}。特色：${x[2]}。`}/><MapLink query={`${x[0]} Melbourne`}/></article>})}</div></div>}
+        {visibleSydneyFood.length>0&&<div className="food-block"><div className="food-title coral"><span>SYD</span><div><h3>Sydney Food Guide</h3><p>{foodFilter==="全部"?"精選 21 間咖啡、早午餐、正餐與甜點":`${foodFilter} · ${visibleSydneyFood.length} 間`}</p></div></div><div className="restaurant-list">{visibleSydneyFood.map((x,i)=>{const id=foodCardId("syd-guide",x[0]);return <article id={id} className={focusedFood===id?"food-target":""} key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><h4>{x[0]}</h4><p>{x[2]}</p><FoodDetails summary={`位於 ${x[1]}，推薦留意 ${x[2]}；原始資料所列價格帶為 ${x[3]}。`}/></div><b>{x[3]}</b><MapLink query={`${x[0]} Sydney`}/></article>})}</div><p className="data-note">價格為預估範圍；營業時間與菜單請在前往前確認。</p></div>}
+        {(visibleMelTripFood.length>0||visibleSydTripFood.length>0)&&<div className="food-block trip-food-block"><div className="section-head compact"><div><p className="eyebrow">FROM THE MAIN ITINERARY</p><h3>行程順路美食</h3></div><p>以下餐飲與品飲地點來自主行程 PDF，與上方兩份專門指南分開整理。</p></div><div className={`trip-food-columns ${(!visibleMelTripFood.length||!visibleSydTripFood.length)?"single":""}`}>{visibleMelTripFood.length>0&&<div><h4>Melbourne · {visibleMelTripFood.length} 間</h4><div className="trip-food-grid">{visibleMelTripFood.map((x,i)=>{const id=foodCardId("mel-trip",x[0]);return <article id={id} className={focusedFood===id?"food-target":""} key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p><FoodDetails summary={`位於 ${x[1]}，可依當日動線彈性安排；推薦品項或類型：${x[2]}。`}/></div><MapLink query={`${x[0]} Melbourne`}/></article>})}</div></div>}{visibleSydTripFood.length>0&&<div><h4>Sydney & NSW · {visibleSydTripFood.length} 間</h4><div className="trip-food-grid">{visibleSydTripFood.map((x,i)=>{const id=foodCardId("syd-trip",x[0]);return <article id={id} className={focusedFood===id?"food-target":""} key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p><FoodDetails summary={`位於 ${x[1]}，可依當日動線彈性安排；推薦品項或類型：${x[2]}。`}/></div><MapLink query={`${x[0]} Sydney`}/></article>})}</div></div>}</div><p className="data-note">目前顯示「{foodFilter}」分類；名稱與分區依 PDF 整理，營業資訊請出發前再次確認。</p></div>}
       </section>
 
       <section className="section checklist" id="checklist">
