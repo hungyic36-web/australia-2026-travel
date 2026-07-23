@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type ReactNode } from "react";
+import { getStopInfo } from "./stop-info";
 
 type Day = {
   day: number;
@@ -222,6 +223,31 @@ function DayMap({ route, day }: { route: DayRoute; day: number }) {
   );
 }
 
+function StopItem({ stop, index }: { stop: string; index: number }) {
+  const [expanded, setExpanded] = useState(false);
+  const info = getStopInfo(stop);
+  const panelId = `stop-intro-${index}-${stop.replace(/[^a-zA-Z0-9]/g, "").slice(0, 18)}`;
+  return (
+    <li className={`stop-item ${expanded ? "expanded" : ""}`}>
+      <b>{String(index + 1).padStart(2, "0")}</b>
+      <div className="stop-copy">
+        <small>{info.meta}</small>
+        <button
+          className="stop-intro-toggle"
+          type="button"
+          aria-expanded={expanded}
+          aria-controls={panelId}
+          onClick={() => setExpanded(!expanded)}
+        >
+          <span>{stop}</span>
+          <em>{expanded ? "收合簡介 −" : "查看簡介 ＋"}</em>
+        </button>
+        {expanded && <p id={panelId} className="stop-description">{info.description}</p>}
+      </div>
+    </li>
+  );
+}
+
 export default function Home() {
   const [city, setCity] = useState("全部");
   const [openDay, setOpenDay] = useState(2);
@@ -296,7 +322,7 @@ export default function Home() {
             <button className="day-summary" onClick={()=>setOpenDay(openDay===d.day?0:d.day)} aria-expanded={openDay===d.day}>
               <span className="day-no">D{String(d.day).padStart(2,"0")}</span><span className="day-date">{d.date}<small>{d.weekday}</small></span><span className="day-title"><small>{d.city}</small>{d.title}</span><span className="toggle">{openDay===d.day?"−":"＋"}</span>
             </button>
-            {openDay===d.day && <div className="day-detail"><div className="detail-intro"><p>{d.summary}</p><span>{d.transport}</span></div><div className="day-detail-grid"><div className="day-plan"><ol>{d.stops.map((s,i)=><li key={s}><b>{String(i+1).padStart(2,"0")}</b><span>{s}</span></li>)}</ol>{d.food&&<div className="food-line"><b>順路口袋名單</b>{d.food.map(f=><span key={f}>{f}</span>)}</div>}{d.note&&<p className="note">NOTE — {d.note}</p>}</div><DayMap route={dayRoutes[d.day]} day={d.day}/></div></div>}
+            {openDay===d.day && <div className="day-detail"><div className="detail-intro"><p>{d.summary}</p><span>{d.transport}</span></div><div className="day-detail-grid"><div className="day-plan"><ol>{d.stops.map((s,i)=><StopItem key={`${d.day}-${i}-${s}`} stop={s} index={i}/>)}</ol>{d.food&&<div className="food-line"><b>順路口袋名單</b>{d.food.map(f=><span key={f}>{f}</span>)}</div>}{d.note&&<p className="note">NOTE — {d.note}</p>}</div><DayMap route={dayRoutes[d.day]} day={d.day}/></div></div>}
           </article>)}
         </div>
       </section>
