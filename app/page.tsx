@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { getStopInfo } from "./stop-info";
 
 type Day = {
@@ -34,6 +34,32 @@ const days: Day[] = [
   { day: 15, date: "8/22", weekday: "六", city: "雪梨", title: "North Sydney・The Rocks・返程", summary: "以北雪梨早餐和週末市集收尾，下午採買後前往機場。", transport: "火車／渡輪＋機場交通", stops: ["09:00 Kirribilli／North Sydney", "The Rocks Weekend Market", "12:00 QVB", "14:00 Black Star Pastry", "16:00 取行李前往機場", "SYD 21:55 出發"], food: ["Celsius Coffee Co.", "The Grounds", "Black Star Pastry"], note: "國際線建議至少提前 3 小時抵達；機場站附加費不計入 Opal 日上限。" },
   { day: 16, date: "8/23", weekday: "日", city: "移動", title: "香港轉機・抵達台北", summary: "清晨抵達香港，轉機返回台北。", transport: "CX138 → CX564", stops: ["HKG 05:10 抵達", "香港轉機約 3 小時", "HKG 08:10 出發", "TPE 10:00 抵達"] },
 ];
+
+const fixedPlans = [
+  { day: 1, date: "8/8", time: "19:55", label: "CX531 台北出發", detail: "22:00 抵達香港；00:20 轉乘 CX105。" },
+  { day: 2, date: "8/9", time: "11:15", label: "抵達墨爾本", detail: "住宿 Check-in 15:00；入境與交通時間保留彈性。" },
+  { day: 4, date: "8/11", time: "清晨", label: "Yarra Valley 熱氣球", detail: "已有訂位紀錄；前一晚確認集合時間與天候通知。" },
+  { day: 10, date: "8/17", time: "12:30", label: "QF444 飛往雪梨", detail: "住宿 11:00 Check-out；13:55 抵達，15:00 Check-in。" },
+  { day: 11, date: "8/18", time: "11:00", label: "Sydney Opera House 中文導覽", detail: "已預約；前一天再次確認集合地點與票券。" },
+  { day: 12, date: "8/19", time: "06:25", label: "Central 前往 Katoomba", detail: "08:25 抵達；預計 16:19 從 Leura 回程。" },
+  { day: 15, date: "8/22", time: "16:00", label: "取行李並前往機場", detail: "CX138 於 21:55 起飛；國際線預留至少 3 小時。" },
+  { day: 16, date: "8/23", time: "08:10", label: "CX564 香港出發", detail: "預計 10:00 抵達台北。" },
+] as const;
+
+const checklistGroups = [
+  {
+    title: "文件與預約",
+    items: ["有效護照與澳洲簽證／ETA","航班與住宿確認","Incoming Passenger Card 英文填寫","處方藥英文證明","熱氣球預約確認","Phillip Island 門票","Sovereign Hill 門票","Sydney Opera House 中文導覽","Blue Mountains Scenic World 票券"],
+  },
+  {
+    title: "隨身與衣物",
+    items: ["Type I 八字型轉接頭","SIM／eSIM 與離線地圖","防風防雨羽絨外套","發熱衣褲與保暖中層","毛帽、圍巾、手套與厚襪","好走的防滑鞋","摺疊傘、環保袋與保溫瓶","頸枕、耳塞、護唇膏與保濕用品","常備藥與暈車藥","行動電源放隨身行李","護照與重要文件離線備份","出發前再次秤重"],
+  },
+  {
+    title: "購物備忘",
+    items: ["Tim Tam、Red Rock Deli、Pods","T2 Tea、Manuka Honey","Lucas Papaw Ointment","Goat Soap、Vitamin E Cream","Aesop／Jurlique","Swisse／Blackmores","UGG 與羊毛製品","Haigh’s Chocolates","Queen Victoria Market 伴手禮","TRS：同一 ABN 滿 AUD 300 且離境前 60 天內"],
+  },
+] as const;
 
 type DayRoute = {
   area: string;
@@ -248,6 +274,45 @@ function FoodDetails({ summary }: { summary: string }) {
   );
 }
 
+const checklistStorageKey = "australia-2026-checklist-v1";
+
+function PersistentChecklist() {
+  const [checked, setChecked] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(checklistStorageKey);
+      if (saved) setChecked(JSON.parse(saved));
+    } catch {
+      // The checklist remains usable when storage is unavailable.
+    }
+  }, []);
+
+  const updateItem = (key: string, value: boolean) => {
+    const next = { ...checked, [key]: value };
+    setChecked(next);
+    try {
+      window.localStorage.setItem(checklistStorageKey, JSON.stringify(next));
+    } catch {
+      // Ignore storage restrictions; keep the current in-page state.
+    }
+  };
+
+  return (
+    <div className="check-grid">
+      {checklistGroups.map((group, groupIndex) => (
+        <article key={group.title}>
+          <h3>{group.title}</h3>
+          {group.items.map((item, itemIndex) => {
+            const key = `${groupIndex}-${itemIndex}`;
+            return <label key={item}><input type="checkbox" checked={Boolean(checked[key])} onChange={(event) => updateItem(key, event.target.checked)}/> {item}</label>;
+          })}
+        </article>
+      ))}
+    </div>
+  );
+}
+
 function MapLink({ query }: { query: string }) {
   return <a className="map-link" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query + ", Australia")}`} target="_blank" rel="noreferrer" aria-label={`在 Google Maps 開啟 ${query}`}><span className="pin-icon" aria-hidden="true"></span><span>開啟地圖</span><span className="external-arrow" aria-hidden="true">↗</span></a>;
 }
@@ -324,6 +389,15 @@ export default function Home() {
   const visibleSydneyFood = useMemo(() => sydFood.filter(x => foodMatches(foodFilter,x[0],x[2],x[1])),[foodFilter]);
   const visibleMelTripFood = useMemo(() => melTripFood.filter(x => foodMatches(foodFilter,x[0],x[2],x[1])),[foodFilter]);
   const visibleSydTripFood = useMemo(() => sydTripFood.filter(x => foodMatches(foodFilter,x[0],x[2],x[1])),[foodFilter]);
+  useEffect(() => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const start = new Date(2026, 7, 8);
+    const end = new Date(2026, 7, 23);
+    if (today >= start && today <= end) {
+      setOpenDay(Math.floor((today.getTime() - start.getTime()) / 86400000) + 1);
+    }
+  }, []);
   const jumpToFood = (day: number, label: string) => {
     const target = resolveFoodTarget(day, label);
     if (!target) return;
@@ -331,6 +405,13 @@ export default function Home() {
     setFocusedFood(target);
     window.setTimeout(() => {
       document.getElementById(target)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 0);
+  };
+  const jumpToDay = (day: number) => {
+    setCity("全部");
+    setOpenDay(day);
+    window.setTimeout(() => {
+      document.getElementById(`day-${day}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 0);
   };
   const tripStatus = useMemo(() => {
@@ -391,6 +472,23 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="fixed-plans" aria-labelledby="fixed-plans-title">
+        <div className="fixed-plans-heading">
+          <div><p className="eyebrow">BOOKED & TIME-SENSITIVE</p><h2 id="fixed-plans-title">預約與固定時間</h2></div>
+          <p>只集中容易錯過的航班、已預約活動與關鍵交通；班次仍請於前一天再次確認。</p>
+        </div>
+        <div className="fixed-plan-grid">
+          {fixedPlans.map((plan) => (
+            <button type="button" className="fixed-plan-card" onClick={() => jumpToDay(plan.day)} key={`${plan.day}-${plan.time}`}>
+              <span className="fixed-plan-date">{plan.date}<small>D{String(plan.day).padStart(2,"0")}</small></span>
+              <span className="fixed-plan-time">{plan.time}</span>
+              <span className="fixed-plan-copy"><strong>{plan.label}</strong><small>{plan.detail}</small></span>
+              <b aria-hidden="true">↓</b>
+            </button>
+          ))}
+        </div>
+      </section>
+
       <section className="section itinerary" id="itinerary">
         <div className="section-head"><div><p className="eyebrow">THE MASTER PLAN</p><h2>逐日行程</h2></div><p>點開日期即可看到景點順序、交通、餐飲與當日提醒。</p></div>
         <div className="filters" role="group" aria-label="篩選城市">{["全部","移動","墨爾本","雪梨"].map(x => <button key={x} className={city===x?"active":""} onClick={()=>setCity(x)}>{x}</button>)}</div>
@@ -414,6 +512,7 @@ export default function Home() {
           <article><span className="index">05</span><h3>澳洲入境</h3><p>準備有效護照、有效簽證與 Incoming Passenger Card。符合資格者可在 kiosk 完成第一階段，再至 SmartGate 進行臉部辨識。</p><a href={links.smartgate} target="_blank" rel="noreferrer">ABF SmartGate 官方說明 ↗</a></article>
           <article><span className="index">06</span><h3>天氣與行李</h3><p>澳洲 8 月為冬季。墨爾本天氣多變，準備防風防雨外套、摺疊傘與保暖層；企鵝島、熱氣球與藍山尤其注意低溫。</p><p>目前行李規劃：託運 23 kg、手提 7 kg；出發前再以航空公司訂位資料確認。行動電源必須隨身攜帶。</p></article>
           <article><span className="index">07</span><h3>TRS 旅客退稅</h3><p>同一 ABN 的合格消費含 GST 合計至少 AUD 300，並於離境前 60 天內購買。離境當天攜帶護照、登機證、商品與合格正本發票；受限或大型託運物品需先交由 ABF 查驗。</p><a href="https://www.abf.gov.au/entering-and-leaving-australia/tourist-refund-scheme" target="_blank" rel="noreferrer">ABF Tourist Refund Scheme ↗</a></article>
+          <article><span className="index">08</span><h3>支付與消費</h3><p>商店標示價格通常已包含 GST；刷卡、週末或國定假日可能另收 surcharge，結帳前先看菜單或櫃檯標示。</p><p>雪梨使用 Opal 或同一張感應卡／同一裝置完成 tap on 與 tap off；墨爾本 Free Tram Zone 內不需刷卡，超出免費區依 myki 規定操作。</p><a href="https://www.accc.gov.au/consumers/pricing/card-surcharges" target="_blank" rel="noreferrer">ACCC 刷卡附加費說明 ↗</a><a href="https://transportnsw.info/tickets-fares/contactless-payments" target="_blank" rel="noreferrer">Transport NSW 感應支付 ↗</a></article>
         </div>
       </section>
 
@@ -427,11 +526,7 @@ export default function Home() {
 
       <section className="section checklist" id="checklist">
         <div className="section-head"><div><p className="eyebrow">BEFORE YOU GO</p><h2>行前清單</h2></div></div>
-        <div className="check-grid">
-          <article><h3>文件與預約</h3>{["有效護照與澳洲簽證／ETA","航班與住宿確認","Incoming Passenger Card 英文填寫","處方藥英文證明","熱氣球預約確認","Phillip Island 門票","Sovereign Hill 門票","Sydney Opera House 中文導覽","Blue Mountains Scenic World 票券"].map(x=><label key={x}><input type="checkbox"/> {x}</label>)}</article>
-          <article><h3>隨身與衣物</h3>{["Type I 八字型轉接頭","SIM／eSIM 與離線地圖","防風防雨羽絨外套","發熱衣褲與保暖中層","毛帽、圍巾、手套與厚襪","好走的防滑鞋","摺疊傘、環保袋與保溫瓶","頸枕、耳塞、護唇膏與保濕用品","常備藥與暈車藥","行動電源放隨身行李","護照與重要文件離線備份","出發前再次秤重"].map(x=><label key={x}><input type="checkbox"/> {x}</label>)}</article>
-          <article><h3>購物備忘</h3>{["Tim Tam、Red Rock Deli、Pods","T2 Tea、Manuka Honey","Lucas Papaw Ointment","Goat Soap、Vitamin E Cream","Aesop／Jurlique","Swisse／Blackmores","UGG 與羊毛製品","Haigh’s Chocolates","Queen Victoria Market 伴手禮","TRS：同一 ABN 滿 AUD 300 且離境前 60 天內"].map(x=><label key={x}><input type="checkbox"/> {x}</label>)}</article>
-        </div>
+        <PersistentChecklist/>
       </section>
 
       <section className="emergency">
