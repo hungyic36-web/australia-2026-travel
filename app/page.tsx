@@ -59,29 +59,6 @@ const dayRoutes: Record<number, DayRoute> = {
   16: { area: "香港 → 台北", mode: "transit", stops: ["Hong Kong International Airport", "Taiwan Taoyuan International Airport"] },
 };
 
-const dayMapPaths: Record<number, Array<[number, number]>> = {
-  1: [[16,65],[82,32]],
-  2: [[13,28],[43,54],[65,67],[83,37]],
-  3: [[16,20],[38,26],[57,20],[72,39],[62,62],[42,72],[22,64]],
-  4: [[16,64],[30,30],[46,45],[58,68],[69,48],[82,28],[86,70]],
-  5: [[12,24],[30,40],[49,52],[75,65],[88,76]],
-  6: [[16,62],[29,32],[43,28],[54,46],[48,67],[68,61],[84,76]],
-  7: [[12,26],[35,42],[56,62],[74,43],[87,70]],
-  8: [[18,30],[39,42],[58,67],[76,57],[86,28]],
-  9: [[14,65],[42,48],[65,66],[84,34]],
-  10: [[13,67],[58,24],[70,53],[82,63],[88,43]],
-  11: [[17,55],[34,32],[52,24],[67,43],[62,68],[82,72]],
-  12: [[12,66],[42,49],[61,66],[75,42],[87,27]],
-  13: [[13,22],[50,35],[65,52],[78,66],[88,78]],
-  14: [[16,37],[38,55],[61,43],[84,67]],
-  15: [[15,28],[33,46],[55,61],[69,45],[87,76]],
-  16: [[18,34],[82,66]],
-};
-
-const coastalMapDays = new Set([5,7,10,11,13,15]);
-const countryMapDays = new Set([4,9,12]);
-const flightMapDays = new Set([1,10,16]);
-
 const melCoffee = [
   ["Patricia Coffee Brewers", "Double Ristretto Flat White、季節手沖", "巷弄站飲、極簡菜單"],
   ["Brother Baba Budan", "Single Origin Flat White", "Seven Seeds 系、天花板木椅"],
@@ -217,27 +194,25 @@ function routeUrl(route: DayRoute) {
 }
 
 function DayMap({ route, day }: { route: DayRoute; day: number }) {
-  const points = dayMapPaths[day].slice(0, route.stops.length);
-  const theme = flightMapDays.has(day) ? "flight" : coastalMapDays.has(day) ? "coast" : countryMapDays.has(day) ? "country" : "city";
   return (
     <aside className="day-map" aria-label={`${route.area} 當日路線地圖`}>
-      <div className={`travel-map ${theme}`} role="img" aria-label={`${route.area} 景點與大致移動軌跡`}>
-        <span className="map-compass" aria-hidden="true">N</span>
-        <span className="map-caption">DAY {String(day).padStart(2,"0")} · TRAVEL MAP</span>
-        {points.slice(0,-1).map((point,index) => {
-          const next = points[index + 1];
-          const dx = next[0] - point[0];
-          const dy = next[1] - point[1];
-          const length = Math.sqrt(dx * dx + dy * dy);
-          const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-          return <span className="travel-line" aria-hidden="true" key={`${point[0]}-${point[1]}`} style={{left:`${point[0]}%`,top:`${point[1]}%`,width:`${length}%`,transform:`rotate(${angle}deg)`}}/>;
-        })}
-        {points.map((point,index) => (
-          <span className={`travel-stop ${point[0] > 66 ? "label-left" : ""}`} style={{left:`${point[0]}%`,top:`${point[1]}%`}} key={route.stops[index]}>
-            <i>{index + 1}</i><b>{route.stops[index]}</b>
-          </span>
-        ))}
-      </div>
+      <a
+        className="static-route-map-link"
+        href={`/australia-2026-travel/maps-v2/day-${String(day).padStart(2,"0")}.webp`}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={`放大查看 ${route.area} 行程地圖`}
+      >
+        <img
+          className="static-route-map"
+          src={`/australia-2026-travel/maps-v2/day-${String(day).padStart(2,"0")}.webp`}
+          alt={`${route.area} 真實街道底圖、景點編號與大致移動路線`}
+          width="1400"
+          height="840"
+          loading="lazy"
+        />
+        <span>點圖放大 ↗</span>
+      </a>
       <div className="map-route-head"><span>ROUTE MAP</span><strong>{route.area}</strong></div>
       <div className="map-route-stops">
         {route.stops.map((stop, index) => <span key={stop}><b>{index + 1}</b>{stop}</span>)}

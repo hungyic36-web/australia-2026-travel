@@ -127,6 +127,33 @@
   border:1px solid var(--line);
   background:rgba(255,255,255,.58)
 }
+.static-route-map-link{
+  position:relative;
+  display:block;
+  overflow:hidden;
+  background:#eef0e8;
+  text-decoration:none
+}
+.static-route-map{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:5/3;
+  object-fit:cover
+}
+.static-route-map-link>span{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  border:1px solid rgba(23,59,45,.22);
+  border-radius:999px;
+  padding:6px 9px;
+  background:rgba(255,252,244,.9);
+  color:var(--forest);
+  font-size:11px;
+  line-height:1;
+  box-shadow:0 2px 8px rgba(23,33,27,.08)
+}
 .travel-map{
   position:relative;
   height:330px;
