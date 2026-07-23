@@ -198,14 +198,14 @@ function DayMap({ route, day }: { route: DayRoute; day: number }) {
     <aside className="day-map" aria-label={`${route.area} 當日路線地圖`}>
       <a
         className="static-route-map-link"
-        href={`/australia-2026-travel/maps-v2/day-${String(day).padStart(2,"0")}.webp`}
+        href={`/australia-2026-travel/maps-v3/day-${String(day).padStart(2,"0")}.webp`}
         target="_blank"
         rel="noreferrer"
         aria-label={`放大查看 ${route.area} 行程地圖`}
       >
         <img
           className="static-route-map"
-          src={`/australia-2026-travel/maps-v2/day-${String(day).padStart(2,"0")}.webp`}
+          src={`/australia-2026-travel/maps-v3/day-${String(day).padStart(2,"0")}.webp`}
           alt={`${route.area} 真實街道底圖、景點編號與大致移動路線`}
           width="1400"
           height="840"
