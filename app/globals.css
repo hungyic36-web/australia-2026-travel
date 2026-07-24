@@ -88,14 +88,32 @@
   cursor:pointer
 }
 .food-details>button:hover,.food-details>button:focus-visible{border-color:var(--green)}
-.food-details>p{
-  margin:8px 0 0!important;
+.food-info-panel{
+  margin-top:8px;
   padding:10px 12px;
   border-left:2px solid var(--green);
   background:rgba(255,255,255,.42);
+}
+.food-info-panel p{
+  margin:0!important;
   color:var(--ink)!important;
   font-size:12px!important;
   line-height:1.7!important
+}
+.food-info-panel a{
+  display:inline-flex;
+  margin-top:8px;
+  padding:6px 10px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  color:var(--green);
+  font-size:11px;
+  font-weight:700;
+  text-decoration:none
+}
+.food-info-panel a:hover,.food-info-panel a:focus-visible{
+  border-color:var(--green);
+  background:rgba(31,93,69,.06)
 }
 .place-card,.restaurant-list article,.trip-food-grid>article{scroll-margin-top:96px}
 .food-target{

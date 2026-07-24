@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useId, useMemo, useState, type ReactNode } from "react";
 import { getStopInfo } from "./stop-info";
+import { getFoodInfo } from "./food-info";
 
 type Day = {
   day: number;
@@ -262,14 +263,30 @@ function resolveFoodTarget(day: number, label: string) {
   return foodTargets[`${label}|${day}`] ?? foodTargets[label];
 }
 
-function FoodDetails({ summary }: { summary: string }) {
+function FoodDetails({ name, area }: { name: string; area?: string }) {
   const [expanded, setExpanded] = useState(false);
+  const panelId = useId();
+  const details = getFoodInfo(name, area);
   return (
     <div className="food-details">
-      <button type="button" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>
-        {expanded ? "收合摘要 −" : "查看摘要 ＋"}
+      <button
+        type="button"
+        aria-expanded={expanded}
+        aria-controls={panelId}
+        onClick={() => setExpanded(!expanded)}
+      >
+        {expanded ? "收合餐廳資訊 −" : "餐廳資訊 ＋"}
       </button>
-      {expanded && <p>{summary}</p>}
+      {expanded && (
+        <div className="food-info-panel" id={panelId}>
+          <p>{details.intro}</p>
+          {details.officialUrl && (
+            <a href={details.officialUrl} target="_blank" rel="noreferrer">
+              {details.linkLabel ?? "官方網站"} ↗
+            </a>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -453,7 +470,7 @@ export default function Home() {
       </section>
 
       <section className="stats" id="quick">
-        <div><strong>16</strong><span>旅行天數</span></div><div><strong>2</strong><span>主要城市</span></div><div><strong>6</strong><span>近郊探險</span></div><div><strong>31</strong><span>咖啡與餐廳</span></div>
+        <div><strong>16</strong><span>旅行天數</span></div><div><strong>2</strong><span>主要城市</span></div><div><strong>6</strong><span>近郊探險</span></div><div><strong>79</strong><span>餐飲口袋名單</span></div>
       </section>
 
       <section className="downloads" aria-labelledby="downloads-title">
@@ -519,9 +536,9 @@ export default function Home() {
       <section className="section food" id="food">
         <div className="section-head"><div><p className="eyebrow">COFFEE & TABLE</p><h2>雙城口袋名單</h2></div><p>用子分類快速查看咖啡、正餐、甜點、市場小吃或酒莊品飲。</p></div>
         <div className="food-filters" role="group" aria-label="篩選美食分類">{foodCategories.map(category=><button key={category} className={foodFilter===category?"active":""} onClick={()=>setFoodFilter(category)} aria-pressed={foodFilter===category}>{category}</button>)}</div>
-        {(foodFilter==="全部"||foodFilter==="咖啡／早午餐")&&<div className="food-block"><div className="food-title"><span>MEL</span><div><h3>Melbourne Coffee Trail</h3><p>CBD 10 間特色咖啡店</p></div></div><div className="card-grid">{melCoffee.map((x,i)=>{const id=foodCardId("mel-coffee",x[0]);return <article id={id} className={`place-card ${focusedFood===id?"food-target":""}`} key={x[0]}><small>{String(i+1).padStart(2,"0")} · COFFEE</small><h4>{x[0]}</h4><b>{x[1]}</b><p>{x[2]}</p><FoodDetails summary={`推薦品項：${x[1]}。特色：${x[2]}。`}/><MapLink query={`${x[0]} Melbourne`}/></article>})}</div></div>}
-        {visibleSydneyFood.length>0&&<div className="food-block"><div className="food-title coral"><span>SYD</span><div><h3>Sydney Food Guide</h3><p>{foodFilter==="全部"?"精選 21 間咖啡、早午餐、正餐與甜點":`${foodFilter} · ${visibleSydneyFood.length} 間`}</p></div></div><div className="restaurant-list">{visibleSydneyFood.map((x,i)=>{const id=foodCardId("syd-guide",x[0]);return <article id={id} className={focusedFood===id?"food-target":""} key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><h4>{x[0]}</h4><p>{x[2]}</p><FoodDetails summary={`位於 ${x[1]}，推薦留意 ${x[2]}；原始資料所列價格帶為 ${x[3]}。`}/></div><b>{x[3]}</b><MapLink query={`${x[0]} Sydney`}/></article>})}</div><p className="data-note">價格為預估範圍；營業時間與菜單請在前往前確認。</p></div>}
-        {(visibleMelTripFood.length>0||visibleSydTripFood.length>0)&&<div className="food-block trip-food-block"><div className="section-head compact"><div><p className="eyebrow">FROM THE MAIN ITINERARY</p><h3>行程順路美食</h3></div><p>以下餐飲與品飲地點來自主行程 PDF，與上方兩份專門指南分開整理。</p></div><div className={`trip-food-columns ${(!visibleMelTripFood.length||!visibleSydTripFood.length)?"single":""}`}>{visibleMelTripFood.length>0&&<div><h4>Melbourne · {visibleMelTripFood.length} 間</h4><div className="trip-food-grid">{visibleMelTripFood.map((x,i)=>{const id=foodCardId("mel-trip",x[0]);return <article id={id} className={focusedFood===id?"food-target":""} key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p><FoodDetails summary={`位於 ${x[1]}，可依當日動線彈性安排；推薦品項或類型：${x[2]}。`}/></div><MapLink query={`${x[0]} Melbourne`}/></article>})}</div></div>}{visibleSydTripFood.length>0&&<div><h4>Sydney & NSW · {visibleSydTripFood.length} 間</h4><div className="trip-food-grid">{visibleSydTripFood.map((x,i)=>{const id=foodCardId("syd-trip",x[0]);return <article id={id} className={focusedFood===id?"food-target":""} key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p><FoodDetails summary={`位於 ${x[1]}，可依當日動線彈性安排；推薦品項或類型：${x[2]}。`}/></div><MapLink query={`${x[0]} Sydney`}/></article>})}</div></div>}</div><p className="data-note">目前顯示「{foodFilter}」分類；名稱與分區依 PDF 整理，營業資訊請出發前再次確認。</p></div>}
+        {(foodFilter==="全部"||foodFilter==="咖啡／早午餐")&&<div className="food-block"><div className="food-title"><span>MEL</span><div><h3>Melbourne Coffee Trail</h3><p>CBD 10 間特色咖啡店</p></div></div><div className="card-grid">{melCoffee.map((x,i)=>{const id=foodCardId("mel-coffee",x[0]);return <article id={id} className={`place-card ${focusedFood===id?"food-target":""}`} key={x[0]}><small>{String(i+1).padStart(2,"0")} · COFFEE</small><h4>{x[0]}</h4><b>{x[1]}</b><p>{x[2]}</p><FoodDetails name={x[0]} area="Melbourne CBD"/><MapLink query={`${x[0]} Melbourne`}/></article>})}</div></div>}
+        {visibleSydneyFood.length>0&&<div className="food-block"><div className="food-title coral"><span>SYD</span><div><h3>Sydney Food Guide</h3><p>{foodFilter==="全部"?"精選 21 間咖啡、早午餐、正餐與甜點":`${foodFilter} · ${visibleSydneyFood.length} 間`}</p></div></div><div className="restaurant-list">{visibleSydneyFood.map((x,i)=>{const id=foodCardId("syd-guide",x[0]);return <article id={id} className={focusedFood===id?"food-target":""} key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><h4>{x[0]}</h4><p>{x[2]}</p><FoodDetails name={x[0]} area={x[1]}/></div><b>{x[3]}</b><MapLink query={`${x[0]} Sydney`}/></article>})}</div><p className="data-note">價格為預估範圍；營業時間與菜單請在前往前確認。</p></div>}
+        {(visibleMelTripFood.length>0||visibleSydTripFood.length>0)&&<div className="food-block trip-food-block"><div className="section-head compact"><div><p className="eyebrow">FROM THE MAIN ITINERARY</p><h3>行程順路美食</h3></div><p>以下餐飲與品飲地點來自主行程 PDF，與上方兩份專門指南分開整理。</p></div><div className={`trip-food-columns ${(!visibleMelTripFood.length||!visibleSydTripFood.length)?"single":""}`}>{visibleMelTripFood.length>0&&<div><h4>Melbourne · {visibleMelTripFood.length} 間</h4><div className="trip-food-grid">{visibleMelTripFood.map((x,i)=>{const id=foodCardId("mel-trip",x[0]);return <article id={id} className={focusedFood===id?"food-target":""} key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p><FoodDetails name={x[0]} area={x[1]}/></div><MapLink query={`${x[0]} Melbourne`}/></article>})}</div></div>}{visibleSydTripFood.length>0&&<div><h4>Sydney & NSW · {visibleSydTripFood.length} 間</h4><div className="trip-food-grid">{visibleSydTripFood.map((x,i)=>{const id=foodCardId("syd-trip",x[0]);return <article id={id} className={focusedFood===id?"food-target":""} key={x[0]}><span>{String(i+1).padStart(2,"0")}</span><div><small>{x[1]}</small><strong>{x[0]}</strong><p>{x[2]}</p><FoodDetails name={x[0]} area={x[1]}/></div><MapLink query={`${x[0]} Sydney`}/></article>})}</div></div>}</div><p className="data-note">目前顯示「{foodFilter}」分類；名稱與分區依 PDF 整理，營業資訊請出發前再次確認。</p></div>}
       </section>
 
       <section className="section checklist" id="checklist">
