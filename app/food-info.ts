@@ -70,7 +70,6 @@ const info: Record<string, FoodInfo> = {
   },
   "Marrickville Pork Roll": {
     intro: "以越南 bánh mì 聞名的快餐選項，適合外帶；市區據點與 Marrickville 本店不同，前往前應確認分店位置。",
-    officialUrl: "https://marrickvilleporkroll.com.au/",
   },
   "Four Frogs Crêperie": {
     intro: "Sydney 的法式 crêperie，甜、鹹薄餅皆有，可作下午茶或輕晚餐；Circular Quay 店位於 Gateway Sydney 一帶。",
@@ -78,7 +77,7 @@ const info: Record<string, FoodInfo> = {
   },
   "Auvers Dining": {
     intro: "以現代澳洲料理結合亞洲風味的 café／餐廳，菜色呈現感較強，適合想安排一頓較完整早午餐的時段。",
-    officialUrl: "https://auvers.com.au/",
+    officialUrl: "https://www.auverscafe.com.au/",
   },
   "Pancakes on the Rocks": {
     intro: "Sydney 長期營業的休閒餐廳品牌，以甜、鹹 pancakes 與大份量餐點為主，適合多人分食或較晚時段用餐。",
@@ -108,7 +107,7 @@ const info: Record<string, FoodInfo> = {
   },
   "IIKO Mazesoba": {
     intro: "以日式拌麵 mazesoba 為主的專門店，屬於無湯麵型餐點；可依個人口味調整配料與拌醬。",
-    officialUrl: "https://iikomazesoba.com.au/",
+    officialUrl: "https://mazesoba.com.au/",
   },
   "Macelleria Newtown": {
     intro: "以 butcher-to-table 概念供應牛排與漢堡，肉類選擇較多；適合 Newtown 行程後安排較有份量的正餐。",
@@ -226,7 +225,7 @@ const info: Record<string, FoodInfo> = {
   },
   "Cannoleria": {
     intro: "專做 Sicilian cannoli 的甜點品牌，內餡口味會更換；適合市場行程中作小份甜點。",
-    officialUrl: "https://cannoleria.com.au/",
+    officialUrl: "https://www.cannoleriaaustralia.com.au/",
   },
   "Baba Su": {
     intro: "South Melbourne Market 的烘焙甜點選項，PDF 特別列出斑蘭牛角包；適合逛市場時作為小份點心。",
@@ -239,11 +238,11 @@ const info: Record<string, FoodInfo> = {
   },
   "Claypots Seafood Bar": {
     intro: "以海鮮料理與 claypot 烹調為特色的餐廳，份量適合共享；若要吃完整正餐，建議與市場逛街時間分開預留。",
-    officialUrl: "https://claypots.com.au/",
+    officialUrl: "https://www.instagram.com/claypots.st.kilda/",
+    linkLabel: "官方社群",
   },
   "Ho Jiak Haymarket": {
     intro: "Haymarket 的馬來西亞餐廳，菜色取向熱鬧、口味較濃，適合多人共享；熱門晚餐時段可先訂位。",
-    officialUrl: "https://www.hojiak.com.au/",
   },
   "Mamak": {
     intro: "以 roti、satay 與馬來西亞街頭料理聞名，現場常見排隊；若行程時間固定，可避開正餐尖峰。",
@@ -273,11 +272,10 @@ const info: Record<string, FoodInfo> = {
   },
   "The Hill Bar & Kitchen": {
     intro: "Gerringong 一帶的休閒餐酒館，可作南岸自駕途中的正餐停靠點；菜單與營業日請出發前確認。",
-    officialUrl: "https://thehillbarandkitchen.com/",
+    officialUrl: "https://www.thehillbarandkitchengerringong.com/",
   },
   "Vic’s Meat Market": {
     intro: "Sydney Fish Market 內以肉品與熟食為主的商家，可找現做三明治等選項；市場重建或攤位調整期間應先確認位置。",
-    officialUrl: "https://www.vicsmeatmarket.com.au/",
   },
   "烤生蠔": {
     intro: "這是 Sydney Fish Market 的現場小吃類型，不指向單一店家；建議依當日攤商、價格與生蠔來源現場選擇。",
@@ -291,7 +289,7 @@ const info: Record<string, FoodInfo> = {
   },
   "Celsius Coffee Co.": {
     intro: "Kirribilli 碼頭旁的 waterfront café，可搭渡輪前往；座位有限，週末可能需要候位。",
-    officialUrl: "https://celsiuscoffee.com.au/",
+    officialUrl: "https://www.celsiuscoffeeco.com/",
   },
   "The Grounds of the City": {
     intro: "位於 Sydney CBD 的復古風 café／restaurant，空間與服務較完整，適合購物行程中安排坐下用餐。",
